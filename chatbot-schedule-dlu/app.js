@@ -1,10 +1,6 @@
 const express = require("express");
 const bodyparser = require("body-parser");
-const {
-  handleDataScheduleToJSON,
-  performSyncScheduleFunctions,
-  urlHTMLFile
-} = require('api-dlu');
+
 const app = express();
 const scheduleRoutes = require('./routes/scheduleRoutes'); 
 
