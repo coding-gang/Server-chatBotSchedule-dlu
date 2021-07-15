@@ -2,7 +2,8 @@ const Schedule = require("../models/scheduleModel");
 const mongoose = require('mongoose');
 const {
     handleDataScheduleToJSON,
-    performSyncScheduleFunctions
+    performSyncScheduleFunctions,
+    consoleLogAPI
     
   } = require('api-dlu');
 
@@ -49,22 +50,26 @@ const SaveScheduleFromDB  = async (data , studentId)=>{
    const dateNow  = new Date().toISOString().split("T")[0];
     await Schedule.find({studentId: studentId} , async(err, result)=>{
    
-           if(result.length  === 0){
-            console.log(studentId);
-            const arrSchedule =  data.map( x => ({thu: x[Object.keys(x)[0]] ,
-                                                  sang: x.Sáng ,chieu: x.Chiều , toi: x.Tối }));
+           if(result.length  === 0){      
+            const [,...filterData] = [...data];   
+            const arrSchedule =  filterData.map( x => ({thu: x[Object.keys(x)[0]],
+                                                       sang: x.Sáng ,chieu: x.Chiều, toi: x.Tối }));
              const scheduleModel = {
-              studentId : studentId,
-              schedules :arrSchedule,
+              studentId : studentId,     
+               schedules :  arrSchedule,          
               dateCreated :dateNow
              }    
-             console.log(scheduleModel);
-            await Schedule.create(scheduleModel);
-           }else{
-            console.log("error");
-           }
+         await Schedule.create(scheduleModel ,async (err ,result)=>{
+            console.log(result);
+           });
 
-   });
+           }
+           // check datetime in week
+       //   console.log(result[0].schedules[0].thu);
+           if(err) console.log(err);
+   }
+     
+   );
    
    
 }

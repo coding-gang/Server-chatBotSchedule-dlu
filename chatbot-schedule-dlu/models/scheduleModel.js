@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const ObjectId = Schema.ObjectId;
 
+
 const ScheduleSchema = new Schema({
     id:ObjectId,
     studentId: { type: Number,min:1000000 ,max: 9999999,
@@ -15,12 +16,14 @@ const ScheduleSchema = new Schema({
         type: Date,default: new Date().toISOString()
     },
     schedules:[
-        {
-          thu: String,
-          sang: String,
-          chieu:String,
-          toi:String
-        }
+      {
+        _id : false,
+        thu: String,
+        sang: String,
+        chieu:String,
+        toi:String
+      
+    }
     ]
   });
 const Schedule = mongoose.model("Schedule",ScheduleSchema);
