@@ -11,7 +11,7 @@ const ScheduleSchema = new Schema({
     },
     yearStudy: { type: String, default:null },
     termID: { type: String ,default:null },
-    week: { type: Number, max:2 ,default:null },
+    week: { type: Number, max:100 ,default:null },
     dateCreated:{
         type: Date,default: new Date().toISOString()
     },
