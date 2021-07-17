@@ -2,9 +2,8 @@ const Schedule = require("../models/scheduleModel");
 const mongoose = require('mongoose');
 const {
     handleDataScheduleToJSON,
-    performSyncScheduleFunctions,
-    consoleLogAPI
-  
+    performSyncScheduleFunctions
+
   } = require('api-dlu');
 
   let yearStudy = "";
@@ -20,14 +19,14 @@ exports.getSchedule = async(req, res) =>{
 
         console.log(Date.now() + " Ping Received");
       
-        if (req.query.studentID) {
+        if ("1812866") {
           let scheduleWeek =[];
           const studentId =req.query.studentID;
 
       //    getYearAndTermStudy();
        //   getWeek(new Date());   
-
        //   await performSyncScheduleFunctions(req.query.studentID, req.query.yearStudy, req.query.termID, req.query.week);
+    
        await performSyncScheduleFunctions(req.query.studentID, req.query.yearStudy, req.query.termID, req.query.week)
        .then(kq => handleDataScheduleToJSON()).then(data => {    
         const time ={
@@ -54,6 +53,7 @@ exports.getSchedule = async(req, res) =>{
          objDate.weekId =  (parseInt(objDate.weekId) -1).toString();
          console.log(objDate.weekId);
         });    
+      
         scheduleWeek.forEach( async (x) =>{   
           console.log(objDate.weekId);         
           await SaveScheduleFromDB(x,studentId,objDate);            
@@ -98,10 +98,9 @@ const SaveScheduleFromDB  = async (data , studentId , params)=>{
               yearStudy:yearStudy,
               termID :termID
              }
-             console.log(scheduleModel);
+           console.log(scheduleModel);
          await Schedule.create(scheduleModel ,async (err ,result)=>{
-            console.log(result);
-          
+            console.log(result);         
            });
            objDate.weekId = (parseInt(objDate.weekId) +1).toString();
            console.log( objDate.weekId);

@@ -1,4 +1,3 @@
-const express = require("express");
 require("dotenv").config();
 const mongoose = require('mongoose');
 const app = require('./app');
@@ -10,7 +9,7 @@ mongoose.connect(stringConnect, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useFindAndModify: false,
-}).then(() => console.log('db connect success'));;
+}).then(() => console.log('db connect success'));
  const db = mongoose.connection;
 
 
