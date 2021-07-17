@@ -14,7 +14,7 @@ const {
   const year = date.getFullYear();
   const month = date.getMonth();
   let objDate ;
-
+  
 exports.getSchedule = async(req, res) =>{
 
         console.log(Date.now() + " Ping Received");
@@ -32,8 +32,7 @@ exports.getSchedule = async(req, res) =>{
         const time ={
             weekId:req.query.week,
             yearStudy:req.query.yearStudy,
-            termId : req.query.termID
-           
+            termId : req.query.termID        
         };
         objDate = time;
         res.json(data);
@@ -98,12 +97,9 @@ const SaveScheduleFromDB  = async (data , studentId , params)=>{
               yearStudy:yearStudy,
               termID :termID
              }
-           console.log(scheduleModel);
          await Schedule.create(scheduleModel ,async (err ,result)=>{
-            console.log(result);         
            });
            objDate.weekId = (parseInt(objDate.weekId) +1).toString();
-           console.log( objDate.weekId);
            }
                 
           // check datetime in week
