@@ -15,16 +15,15 @@ const {
   const month = date.getMonth();
   let objDate ;
   
+  // get today
 exports.getSchedule = async(req, res) =>{
-
         console.log(Date.now() + " Ping Received");
-      
-        if ("1812866") {
+        if (req.query.studentID) {
           let scheduleWeek =[];
           const studentId =req.query.studentID;
 
-      //    getYearAndTermStudy();
-       //   getWeek(new Date());   
+         getYearAndTermStudy();
+         getWeek(new Date());   
        //   await performSyncScheduleFunctions(req.query.studentID, req.query.yearStudy, req.query.termID, req.query.week);
     
        await performSyncScheduleFunctions(req.query.studentID, req.query.yearStudy, req.query.termID, req.query.week)
@@ -52,11 +51,19 @@ exports.getSchedule = async(req, res) =>{
          objDate.weekId =  (parseInt(objDate.weekId) -1).toString();
          console.log(objDate.weekId);
         });    
-      
-        scheduleWeek.forEach( async (x) =>{   
-          console.log(objDate.weekId);         
-          await SaveScheduleFromDB(x,studentId,objDate);            
-         });
+        await Schedule.find({studentId: studentId} , async(err, result)=>{
+          if(result.length === 0 || result.length <3 ){
+            scheduleWeek.forEach( async (x) =>{   
+              console.log(objDate.weekId);         
+              await SaveScheduleFromDB(x,studentId,objDate);            
+             });
+            }
+           else{
+            await UpdateAndRemoveSchedule(studentId,result);
+           }
+          
+          });
+     
         } else {
           const result = {
             example: 'http://localhost:8000/?studentID={yourStudentID}&yearStudy=2019-2020&termID=HK02&week=18',
@@ -73,8 +80,6 @@ exports.getSchedule = async(req, res) =>{
 }
 
 const SaveScheduleFromDB  = async (data , studentId , params)=>{
-   const dateNow  = new Date().toISOString().split("T")[0];
-    await Schedule.find({studentId: studentId} , async(err, result)=>{
            if(result.length === 0 || result.length <3 ){   
          
              if(!params.weekId && !params.yearStudy && !params.termId){
@@ -83,8 +88,7 @@ const SaveScheduleFromDB  = async (data , studentId , params)=>{
              }else{
                  week =params.weekId;
                  yearStudy =params.yearStudy;
-                 termID =params.termId;
-                
+                 termID =params.termId;         
              }
             const [,...filterData] = [...data];   
             const arrSchedule =  filterData.map( x => ({thu: x[Object.keys(x)[0]],
@@ -100,16 +104,41 @@ const SaveScheduleFromDB  = async (data , studentId , params)=>{
          await Schedule.create(scheduleModel ,async (err ,result)=>{
            });
            objDate.weekId = (parseInt(objDate.weekId) +1).toString();
+
            }
-                
-          // check datetime in week
-             
-       //   console.log(result[0].schedules[0].thu); 
-           if(err) console.log(err);
-   }
-     
-   );
-   
+           if(err){
+            console.log(err);
+        
+           };
+          }
+
+
+
+const UpdateAndRemoveSchedule = async (studentId,result) =>{
+      // check datetime in week
+      const weeks = result.map(x => x.week);
+      console.log(weeks);
+      console.log(week);
+  if(weeks[0] < week && week === weeks[2] ){
+   await Schedule.remove({ week: week } , async ( err , result) =>{
+             if(result){
+                 console.log("ok");
+                 // update schedule
+             }
+             console.log(err);
+   })
+  }
+
+  if(week > weeks[2]){
+   await Schedule.findByIdAndRemove({studentId:studentId} , async ( err , result) =>{
+     if(result){
+         console.log("ok");
+         // create schedule date now
+
+     }
+     console.log(err);
+});
+  }
 }
 
 const getWeek = d => {
