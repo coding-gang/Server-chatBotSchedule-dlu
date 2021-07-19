@@ -19,15 +19,14 @@ const {
 exports.getSchedule = async(req, res) =>{
         console.log(Date.now() + " Ping Received");
         if (req.query.studentID) {
-          let scheduleWeek =[];
           const studentId =req.query.studentID;
-       
           await Schedule.find({studentId: studentId} , async (err, result)=>{
            
             if(result.length === 3 ){     
                 result.sort( (a, b) => a.week - b.week );
                 await UpdateAndRemoveSchedule(studentId,result);   
-                res.json(result); 
+            
+            
             }
             else{
               await performSyncScheduleFunctions(req.query.studentID, req.query.yearStudy, req.query.termID, req.query.week)
@@ -78,6 +77,7 @@ exports.getSchedule = async(req, res) =>{
           }
           res.json(result); 
         }  
+     
         res.json("ok");
 }
 
@@ -99,37 +99,40 @@ const SaveScheduleFromDB  = async (data , studentId , params)=>{
 };
 
 const UpdateAndRemoveSchedule = async (studentId,result) =>{
-    week =13;
+    let weekUpdate =13;
       // check datetime in week
       const weeks = result.map(x => x.week);
       console.log(weeks);
-  if(weeks[0] < week && week === weeks[2] ){
+  if(weeks[0] < weekUpdate && weekUpdate === weeks[2] ){
    await Schedule.findOneAndRemove({ studentId: studentId , week: weeks[0] } , async ( err , result) =>{
              if(result){
-              week = (week +1).toString();   
+              weekUpdate = (weekUpdate +1).toString();   
+               console.log(weekUpdate);
                  console.log(result);
                  yearStudy =  result.yearStudy;
                  termID = result.termID;
-                 await performSyncScheduleFunctions(studentId,yearStudy,termID, week.toString())
-                 .then(kq => handleDataScheduleToJSON()).then( async data => {       
-                 await createSchedule(data,studentId);
-                 });        
-              
+                 await performSyncScheduleFunctions(studentId,yearStudy,termID, weekUpdate.toString());
+               let data = await  handleDataScheduleToJSON();
+                week = weekUpdate;
+                  await createSchedule(data,studentId);     
+
              }
-             console.log(err);
+             if(err){
+              console.log(err);
+             }
+           
    })
   }
 
-  if(week > weeks[2]){
-   await Schedule.deleteMany({studentId:studentId} , async ( err , result) =>{
-     if(result){
-         console.log("ok");
-         // create schedule date now
-
-     }
-     console.log(err);
-});
-  }
+//   if(weekUpdate > weeks[2]){
+//    await Schedule.deleteMany({studentId:studentId} , async ( err , result) =>{
+//      if(result){
+//          console.log("ok");
+//          // create schedule date now
+//      }
+//      console.log(err);
+// });
+//   }
 }
 
 
