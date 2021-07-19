@@ -106,14 +106,15 @@ const UpdateAndRemoveSchedule = async (studentId,result) =>{
   if(weeks[0] < weekUpdate && weekUpdate === weeks[2] ){
    await Schedule.findOneAndRemove({ studentId: studentId , week: weeks[0] } , async ( err , result) =>{
              if(result){
-              weekUpdate = (weekUpdate +1).toString();   
+              week = weekUpdate;
+              week = (week +1).toString();   
                console.log(weekUpdate);
                  console.log(result);
                  yearStudy =  result.yearStudy;
                  termID = result.termID;
-                 await performSyncScheduleFunctions(studentId,yearStudy,termID, weekUpdate.toString());
+                 await performSyncScheduleFunctions(studentId,yearStudy,termID, week.toString());
                let data = await  handleDataScheduleToJSON();
-                week = weekUpdate;
+             
                   await createSchedule(data,studentId);     
 
              }
