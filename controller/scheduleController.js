@@ -36,7 +36,7 @@ exports.getSchedule = async(req, res) =>{
           }
           res.json(result); 
         }  
-        
+        res.json("oke"); 
 }
 
 const SaveScheduleFromDB  = async (data , studentId , params)=>{
