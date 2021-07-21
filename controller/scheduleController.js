@@ -103,7 +103,7 @@ const getSchedulefunc = async (studentId , yearStudy ,termID, week) =>{
            
     if(result.length === 3 ){     
         result.sort( (a, b) => a.week - b.week );
-        await UpdateAndRemoveSchedule(studentId,result);   
+        await UpdateAndRemoveSchedule(studentId,result,week);   
     }
     else{
       await performSyncScheduleFunctions(studentId, yearStudy, termID, week)
