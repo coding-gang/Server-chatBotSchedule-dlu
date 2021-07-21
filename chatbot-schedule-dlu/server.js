@@ -1,9 +1,7 @@
 require("dotenv").config();
 const mongoose = require('mongoose');
-
 const server = require('./socket/socket');
-
-const port = process.env.PORT || 8000
+const port = process.env.PORT || 8000;
 
 const stringConnect = process.env.URI.replace("{DB_PASSWORD}",process.env.DB_PASSWORD);
 mongoose.connect(stringConnect, {
@@ -24,8 +22,6 @@ db.on('error', err => {
     process.exit(1);
   
   });
-
-
 
 server.listen( port, () => {
   console.log(`Server running at http://localhost:${port}/`);
