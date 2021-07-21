@@ -56,7 +56,7 @@ const SaveScheduleFromDB  = async (data , studentId , params)=>{
 };
 
 const UpdateAndRemoveSchedule = async (studentId,result) =>{
-    let weekUpdate =14;
+    let weekUpdate =16;   
       // check datetime in week
       const weeks = result.map(x => x.week);
       console.log(weeks);
