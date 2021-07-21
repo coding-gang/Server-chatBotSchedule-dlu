@@ -20,7 +20,9 @@ exports.getSchedule = async(req, res) =>{
         console.log(Date.now() + " Ping Received");
         if (req.query.studentID) {
           const studentId =req.query.studentID;
-         await getSchedulefunc(studentId, req.query.yearStudy, req.query.termID, req.query.week);
+      await getSchedulefunc(studentId, req.query.yearStudy, req.query.termID, req.query.week);
+ 
+        
         } else {
           const result = {
             example: 'http://localhost:8000/?studentID={yourStudentID}&yearStudy=2019-2020&termID=HK02&week=18',
@@ -34,8 +36,7 @@ exports.getSchedule = async(req, res) =>{
           }
           res.json(result); 
         }  
-     
-        res.json("ok");
+        
 }
 
 const SaveScheduleFromDB  = async (data , studentId , params)=>{
@@ -73,13 +74,14 @@ const UpdateAndRemoveSchedule = async (studentId,result , weekCurrent) =>{
                let data = await  handleDataScheduleToJSON();
              
                   await createSchedule(data,studentId);     
-
+                  return result;
              }
              if(err){
               console.log(err);
              }
            
-   })
+   });
+ 
   }
 
   if(weekUpdate > weeks[2]){
@@ -102,8 +104,6 @@ const getSchedulefunc = async (studentId , yearStudy ,termID, week) =>{
     if(result.length === 3 ){     
         result.sort( (a, b) => a.week - b.week );
         await UpdateAndRemoveSchedule(studentId,result);   
-    
-    
     }
     else{
       await performSyncScheduleFunctions(studentId, yearStudy, termID, week)
@@ -115,8 +115,7 @@ const getSchedulefunc = async (studentId , yearStudy ,termID, week) =>{
        };
        objDate = time;
        await SaveScheduleFromDB(data,studentId, objDate);
-     
-    //   scheduleWeek.push(data);
+  
       });
        // save schedule next week
        await performSyncScheduleFunctions(studentId, objDate.yearStudy, objDate.termId, (parseInt(objDate.weekId) +1).toString())
@@ -134,6 +133,8 @@ const getSchedulefunc = async (studentId , yearStudy ,termID, week) =>{
        });    
     }
   });    
+ 
+     
 }
 
 const createSchedule = async (data , studentId) =>{
