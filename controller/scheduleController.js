@@ -91,6 +91,7 @@ const UpdateAndRemoveSchedule = async (studentId,result) =>{
       console.log(err);
      }
 
+    
 });
   }
 }
