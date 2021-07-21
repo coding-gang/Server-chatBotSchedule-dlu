@@ -56,7 +56,7 @@ const SaveScheduleFromDB  = async (data , studentId , params)=>{
 };
 
 const UpdateAndRemoveSchedule = async (studentId,result) =>{
-    let weekUpdate =13;
+    let weekUpdate =14;
       // check datetime in week
       const weeks = result.map(x => x.week);
       console.log(weeks);
@@ -82,18 +82,18 @@ const UpdateAndRemoveSchedule = async (studentId,result) =>{
    })
   }
 
-//   if(weekUpdate > weeks[2]){
-//    await Schedule.deleteMany({studentId:studentId} , async ( err , result) =>{
-//      if(result){
-//      await getSchedulefunc(studentId,"2019-2020","HK02","12");
-//          // create schedule date now
-//      }if(err){
-//       console.log(err);
-//      }
+  if(weekUpdate > weeks[2]){
+   await Schedule.deleteMany({studentId:studentId} , async ( err , result) =>{
+     if(result){
+     await getSchedulefunc(studentId,"2019-2020","HK02",weekUpdate);
+         // create schedule date now
+     }if(err){
+      console.log(err);
+     }
 
     
-// });
-//   }
+});
+  }
 }
 
 const getSchedulefunc = async (studentId , yearStudy ,termID, week) =>{
