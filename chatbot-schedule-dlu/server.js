@@ -1,6 +1,7 @@
 require("dotenv").config();
 const mongoose = require('mongoose');
-const app = require('./app');
+
+const server = require('./socket/socket');
 
 const port = process.env.PORT || 8000
 
@@ -24,6 +25,8 @@ db.on('error', err => {
   
   });
 
-const server = app.listen( port, () => {
+
+
+server.listen( port, () => {
   console.log(`Server running at http://localhost:${port}/`);
 });
