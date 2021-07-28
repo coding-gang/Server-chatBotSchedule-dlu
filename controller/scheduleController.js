@@ -15,11 +15,11 @@ const {
   const month = date.getMonth();
  // let objDate ={};
   // get today
-exports.getSchedule = async(req, res) =>{
+exports.getSchedule = async(mssv,yearStudy,termID,week) =>{
         console.log(Date.now() + " Ping Received");
-        if (req.query.studentID) {
-          const studentId =req.query.studentID;
-      await getSchedulefunc(studentId, req.query.yearStudy, req.query.termID, req.query.week);
+        if (mssv) {
+          const studentId =mssv;
+      await getSchedulefunc(mssv, yearStudy, termID,week);
  
         
         } else {
@@ -33,9 +33,9 @@ exports.getSchedule = async(req, res) =>{
               "week": "example: 18, (default: current week)"
             }
           }
-          res.json(result); 
+      //    res.json(result); 
         }  
-        res.json("oke"); 
+       console.log("OKe");
 }
 
 const SaveScheduleFromDB  = async (data , studentId , params)=>{
