@@ -22,7 +22,7 @@ const ScheduleSchema = new Schema({
         sang: String,
         chieu:String,
         toi:String
-      
+  
     }
     ]
   });
