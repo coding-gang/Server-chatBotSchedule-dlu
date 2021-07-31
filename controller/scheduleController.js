@@ -1,5 +1,4 @@
 const Schedule = require("../models/scheduleModel");
-const mongoose = require('mongoose');
 const {
     handleDataScheduleToJSON,
     performSyncScheduleFunctions
@@ -67,10 +66,9 @@ const UpdateAndRemoveSchedule = async (studentId,result , weekCurrent) =>{
              }
              else{
              return err;
-             }
-          
+             } 
   }
-
+        
  else if(weekUpdate > weeks[2]){
   const result  = await Schedule.deleteMany({studentId:studentId});
      if(result){
@@ -82,7 +80,6 @@ const UpdateAndRemoveSchedule = async (studentId,result , weekCurrent) =>{
   }
  
   // default current week;
- 
   await performSyncScheduleFunctions(studentId,result[0].yearStudy,result[0].termID, weekUpdate.toString());
   let data = await  handleDataScheduleToJSON();
   console.log(weekUpdate);

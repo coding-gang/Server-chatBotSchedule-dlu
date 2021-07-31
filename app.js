@@ -15,8 +15,8 @@ app.use(function (req, res, next) {
   const result = await scheduleController.getSchedule(mssv,yearStudy,termID,week);
   return result ;
  }
-  getWeekSchedule("1812867","2019-2020","HK02","12").then(result =>{
-    console.log(result);
-  });
+  // getWeekSchedule("1812867","2019-2020","HK02","12").then(result =>{
+  //   console.log(result);
+  // });
   
 module.exports = app;
