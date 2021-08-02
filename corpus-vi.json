@@ -1,0 +1,28 @@
+{
+    "name": "Name of the corpus",
+    "locale": "vi-VN",
+    "data": [
+      {
+        "intent": "agent.greetings.khoabieuTrongTuan",
+        "utterances": [
+          "khóa biểu trong tuần",
+          "tuần này",
+          "khóa biểu tuần này"  
+       ],
+        "answers": [
+          "trong tuần có thời khóa biểu"       
+        ]
+      },
+      {
+        "intent": "agent.greetings.khoaBieuHomNay",
+        "utterances": [
+          "hôm nay môn gì",
+          "thời khóa biểu hôm nay"  
+       ],
+        "answers": [
+          "hôm nay có thời khóa biểu"       
+        ]
+      }
+     
+    ]
+  }
