@@ -186,3 +186,32 @@ const getYearAndTermStudy = () => {
     termID = `HK01`;
   }
 };
+
+const getScheduleByDay = (date) =>{
+  let nameOfDay;
+    const dayOfWeekNumber = new Date().getDay();
+    switch(dayOfWeekNumber){
+      case 0: 
+          nameOfDay = 'Sunday';    
+          break;
+      case 1:
+          nameOfDay = 'Thứ 2';  
+          break;
+      case 2:
+          nameOfDay = 'Thứ 3';    
+          break;
+      case 3:
+          nameOfDay = 'Thứ 4';    
+          break;
+      case 4:
+          nameOfDay = 'Thứ 5';  
+          break;
+      case 5:
+          nameOfDay = 'Thứ 6';  
+          break;
+      case 6:
+          nameOfDay = 'Thứ 7';
+          break;
+  
+  }
+}

@@ -17,15 +17,14 @@ io.on("connection", socket => {
   
     // either with send()
     console.log(`connect success ${socket.id}`);
-  socket.on("scheduleWeek", async (data) => {
-      console.log(data);
-    
+    socket.on("scheduleWeek", async (data) => {
+    console.log(data);
        const kq =  await nlp.process('vi',data);
-        console.log(kq);
-      //  getWeekSchedule("1812866","2019-2020","HK02","12").then(result =>{
-      //  console.log(result);
-     //   socket.emit("send-schedule",result);
-  //});
+       console.log(kq);
+        getWeekSchedule("1812866","2019-2020","HK02","12").then(result =>{
+       console.log(result);
+       socket.emit("send-schedule",result);
+  });
   });
    
   });
