@@ -3,7 +3,7 @@ const { dockStart } = require('@nlpjs/basic');
 exports.trainBot = async () => {
     const dock = await dockStart({ use: ['Basic']});
    const nlp = dock.get('nlp');
-   await nlp.addCorpus('./corpus-vi.json'); 
+  //  await nlp.addCorpus('./corpus-vi.json'); 
     nlp.addLanguage('vi');
     // Adds the utterances and intents for the NLP
     nlp.addDocument('vi', 'xin chào', 'greetings.xinchao');
