@@ -4,14 +4,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node server.js",
+    "start": "nodemon server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "rin",
   "license": "ISC",
   "dependencies": {
     "@nlpjs/basic": "^4.22.0",
-    "api-dlu": "^1.3.2",
+    "api-dlu": "^1.3.6",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "mongoose": "^5.13.2",
