@@ -7,6 +7,11 @@ exports.trainBot = async () => {
     //Adds the utterances and intents for the NLP
     nlp.addDocument('vi', 'xin chào', 'greetings.xinchao');
     nlp.addDocument('vi', 'tuần này', 'greetings.khoabieuTrongTuan');
+    nlp.addDocument('vi', 'trong tuần', 'greetings.khoabieuTrongTuan');
+    nlp.addDocument('vi', 'tuần sau', 'greetings.khoaBieuTuanSau');
+    nlp.addDocument('vi', 'tuần tới', 'greetings.khoaBieuTuanSau');
+    nlp.addDocument('vi', 'tuần vừa rồi', 'greetings.khoaBieuTuanTruoc');
+    nlp.addDocument('vi', 'tuần trước', 'greetings.khoaBieuTuanTruoc');
     nlp.addDocument('vi', 'khóa biểu trong tuần', 'greetings.khoabieuTrongTuan');
     nlp.addDocument('vi', 'khóa biểu tuần này', 'greetings.khoabieuTrongTuan');
     nlp.addDocument('vi', 'hôm nay môn gì', 'greetings.khoaBieuHomNay');

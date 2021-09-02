@@ -24,26 +24,17 @@ const getWeek = d => {
    
 }
 
-const str ="-Môn: Phương pháp nghiên cứu ngôn ngữ (Research Methods) (NN4220D)"
-"-Nhóm: 01"+
-"-Lớp: AVK42A, AVK42B, AVK42C, AVK42D, AVK42E, AVK42SP"+
-"-Tiết: 1->4"+
-"-Phòng: Online_001"+
-"-GV: Phan Cảnh Minh Thy"+
-"-Đã học: 8/45 tiết";
 
-console.log(str.split("-Môn:")[0]);
 
 io.on("connection", socket => {
     // either with send()
     console.log(`connect success ${socket.id}`);
     socket.on("scheduleWeek", async (data) => {
-      console.log(data);
-      const kq =  await nlp.process('vi',data);
+      const kq =  await nlp.process('vi',data.message);
 
       switch(kq.answer){
               case "trong tuần": 
-              getWeekSchedule("1812866",undefined,undefined,undefined).then(result =>{
+              getWeekSchedule(data.mssv.toString(),undefined,undefined,undefined).then(result =>{
                 console.log(result);
                 socket.emit("send-schedule",result);
              
@@ -52,7 +43,7 @@ io.on("connection", socket => {
               case "tuần tới":
                 getWeek(new Date());
                 const nextWeek = parseInt(week) +1;
-                getWeekSchedule("1812866",undefined,undefined,nextWeek.toString()).then(result =>{
+                getWeekSchedule(data.mssv.toString(),undefined,undefined,nextWeek.toString()).then(result =>{
                   console.log(result);
                   socket.emit("send-schedule",result);
                
@@ -61,14 +52,14 @@ io.on("connection", socket => {
                   case "tuần trước":
                     getWeek(new Date());
                     const previousWeek = parseInt(week) - 1;
-                    getWeekSchedule("1812866",undefined,undefined,previousWeek.toString()).then(result =>{
+                    getWeekSchedule(data.mssv.toString(),undefined,undefined,previousWeek.toString()).then(result =>{
                       console.log(result);
                       socket.emit("send-schedule",result);
                    
                     });
                       break;    
             default:
-              socket.emit("send-schedule","ko có kq");
+              socket.emit("send-schedule","Xin lỗi, tôi không hiểu ý bạn!");
               break;
 
        }
