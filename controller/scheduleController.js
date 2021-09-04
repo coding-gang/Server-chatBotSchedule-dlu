@@ -205,31 +205,147 @@ const getYearAndTermStudy = () => {
 };
 
 
-// const getScheduleByDay = (date) =>{
-//   let nameOfDay;
-//     const dayOfWeekNumber = new Date().getDay();
-//     switch(dayOfWeekNumber){
-//       case 0: 
-//           nameOfDay = 'Sunday';    
-//           break;
-//       case 1:
-//           nameOfDay = 'Thứ 2';  
-//           break;
-//       case 2:
-//           nameOfDay = 'Thứ 3';    
-//           break;
-//       case 3:
-//           nameOfDay = 'Thứ 4';    
-//           break;
-//       case 4:
-//           nameOfDay = 'Thứ 5';  
-//           break;
-//       case 5:
-//           nameOfDay = 'Thứ 6';  
-//           break;
-//       case 6:
-//           nameOfDay = 'Thứ 7';
-//           break;
+const getScheduleByDay = (dayOfWeekNumber) =>{
+  let nameOfDay;
+ 
+    switch(dayOfWeekNumber){
+      case 0: 
+          nameOfDay = 'Chủ nhật';    
+          break;
+      case 1:
+          nameOfDay = 'Thứ 2';  
+          break;
+      case 2:
+          nameOfDay = 'Thứ 3';    
+          break;
+      case 3:
+          nameOfDay = 'Thứ 4';    
+          break;
+      case 4:
+          nameOfDay = 'Thứ 5';  
+          break;
+      case 5:
+          nameOfDay = 'Thứ 6';  
+          break;
+      case 6:
+          nameOfDay = 'Thứ 7';
+          break;
   
-//   }
-// }
+  }
+  return nameOfDay;
+}
+
+exports.getTodaySchedule = (schedule) =>{
+   const currentDay = new Date().getDay();
+   const currentNoon =  getScheduleByDay(currentDay);
+   const result = schedule.filter(e =>
+   e[Object.keys(e)[0]] === "" ||  e[Object.keys(e)[0]] === currentNoon 
+);
+  return result;
+}
+
+exports.getNextDaySchedule = (schedule,nextDay=null) =>{
+  const today = new Date()
+  const tomorrow = new Date(today)
+  tomorrow.setDate(tomorrow.getDate() + 1)
+  let currentNoon;
+  if(nextDay === null){
+     currentNoon = getScheduleByDay(tomorrow.getDay());
+  }else{
+     currentNoon =nextDay;
+  }
+  const result = schedule.filter(e =>
+  e[Object.keys(e)[0]] === "" ||  e[Object.keys(e)[0]] === currentNoon 
+);
+ return result;
+}
+exports.getYesterDaySchedule = (schedule,day=null) =>{
+  const today = new Date()
+  const yesterDay = new Date(today)
+  yesterDay.setDate(yesterDay.getDate() - 1)
+  let currentNoon;
+  if(day === null){
+     currentNoon = getScheduleByDay(yesterDay.getDay());
+  }else{
+     currentNoon =day;
+  }
+ 
+  const result = schedule.filter(e =>
+  e[Object.keys(e)[0]] === "" ||  e[Object.keys(e)[0]] === currentNoon 
+);
+ return result;
+}
+
+exports.getAfterTomorrowSchedule = (schedule,day=null) =>{
+  const today = new Date();
+  const afterTomorrow = new Date(today);
+  afterTomorrow.setDate(afterTomorrow.getDate() + 2);
+  let currentNoon;
+  if(day === null){
+     currentNoon = getScheduleByDay(afterTomorrow.getDay());
+  }else{
+     currentNoon =day;
+  }
+  const result = schedule.filter(e =>
+  e[Object.keys(e)[0]] === "" ||  e[Object.keys(e)[0]] === currentNoon 
+);
+ return result;
+}
+
+exports.getBeforeYesterDaySchedule = (schedule,day=null) =>{
+  const today = new Date();
+  const BeforeYesterDay = new Date(today);
+  BeforeYesterDay.setDate(BeforeYesterDay.getDate() - 2);
+  let currentNoon;
+  if(day === null){
+     currentNoon = getScheduleByDay(BeforeYesterDay.getDay());
+  }else{
+     currentNoon =day;
+  }
+  const result = schedule.filter(e =>
+  e[Object.keys(e)[0]] === "" ||  e[Object.keys(e)[0]] === currentNoon 
+);
+ return result;
+}
+
+
+
+exports.hasTomorrowIsNextWeek = () =>{
+  const currentDay = new Date().getDay();
+  const currentNoon =  getScheduleByDay(currentDay);
+  if(currentNoon === "Chủ nhật"){
+      return true;
+  }
+      return false;
+}
+
+exports.hasYesterdayIsPreviousWeek = () =>{
+  const currentDay = new Date().getDay();
+  const currentNoon =  getScheduleByDay(currentDay);
+  if(currentNoon === "Thứ 2"){
+      return true;
+  }
+      return false;
+}
+
+exports.hasAfterTomorrowIsNextWeek = () =>{
+  const currentDay = new Date().getDay();
+  let currentNoon =  getScheduleByDay(currentDay);
+  if(currentNoon === "Thứ 7"){
+      return currentNoon = "Thứ 2";
+  }else if(currentNoon === "Chủ nhật"){
+    return currentNoon = "Thứ 3";
+  }
+      return null;
+}
+
+exports.hasBeforeYesterDayIsPreviousWeek = () =>{
+  const currentDay = new Date().getDay();
+  const currentNoon =  getScheduleByDay(currentDay);
+  if(currentNoon === "Thứ 3"){
+      return currentNoon = "Chủ nhật";
+  }else if( currentNoon === "Thứ 2"){
+    return currentNoon = "Thứ 7";
+  }
+      return null;
+}
