@@ -14,8 +14,8 @@ const getWeekSchedule = async(mssv,yearStudy,termID,week) =>{
   return result ;
  }
 
-const getTodaySchedule = (schedule) =>{
-    const result =  scheduleController.getTodaySchedule(schedule);
+const getTodaySchedule = (schedule,date) =>{
+    const result =  scheduleController.getTodaySchedule(schedule,date);
     return result;
 }
   
@@ -33,11 +33,10 @@ io.on("connection", socket => {
     // either with send()
     console.log(`connect success ${socket.id}`);
     socket.on("scheduleWeek", async (data) => {
-      console.log(data);
       const kq =  await nlp.process('vi',data.message);
       console.log(kq);
       switch(kq.answer){
-     
+            
               case "trong tuần": 
                 getWeekSchedule(data.mssv.toString(),undefined,undefined,undefined).then(result =>{            
                 socket.emit("send-schedule",result);           
@@ -116,7 +115,41 @@ io.on("connection", socket => {
                     const result =  scheduleController.getBeforeYesterDaySchedule(schedule);
                     socket.emit("send-schedule",result);
                   }
-                        break;      
+                  break;
+                case "thứ trong tuần":
+                  const date = scheduleController.getScheduleByDate(kq.utterance);
+                 if(date !== "error"){
+                  const scheduleNow = await getWeekSchedule(data.mssv.toString(),undefined,undefined,undefined);
+                  const scheduleByDateNow = getTodaySchedule(scheduleNow,date);        
+                  socket.emit("send-schedule",scheduleByDateNow);
+                 }else{
+                  socket.emit("send-schedule","Xin lỗi, tôi không hiểu ý bạn!");
+                 }
+                  break;      
+                case "thứ tuần sau":
+                    const dateNextWeek = scheduleController.getScheduleByDate(kq.utterance);
+                   if(dateNextWeek === "error"){
+                    socket.emit("send-schedule","Xin lỗi, tôi không hiểu ý bạn123!");
+                   }else{
+                    getWeek(new Date());
+                    const nextWeek = parseInt(week) +1;
+                    const scheduleNextWeek = await getWeekSchedule(data.mssv.toString(),undefined,undefined,nextWeek.toString());
+                    const scheduleByDateNextWeek = getTodaySchedule(scheduleNextWeek,dateNextWeek);        
+                    socket.emit("send-schedule",scheduleByDateNextWeek);                  
+                   } 
+                    break;
+                case "thứ tuần trước":
+                  const datePreviousWeek = scheduleController.getScheduleByDate(kq.utterance);
+                 if(datePreviousWeek === "error"){
+                  socket.emit("send-schedule","Xin lỗi, tôi không hiểu ý bạn123!");
+                 }else{
+                  getWeek(new Date());
+                  const previousWeekByDate = parseInt(week) - 1;
+                  const schedulePreviousWeekByDate = await getWeekSchedule(data.mssv.toString(),undefined,undefined,previousWeekByDate.toString());
+                  const scheduleByDatePreviousWeek = getTodaySchedule(schedulePreviousWeekByDate,datePreviousWeek);        
+                  socket.emit("send-schedule",scheduleByDatePreviousWeek);                  
+                 } 
+                 break;   
             default:
               socket.emit("send-schedule","Xin lỗi, tôi không hiểu ý bạn!");
               break;

@@ -230,14 +230,84 @@ const getScheduleByDay = (dayOfWeekNumber) =>{
       case 6:
           nameOfDay = 'Thứ 7';
           break;
-  
+      case 7:
+          nameOfDay = 'error';
+          break;  
   }
   return nameOfDay;
 }
 
-exports.getTodaySchedule = (schedule) =>{
-   const currentDay = new Date().getDay();
-   const currentNoon =  getScheduleByDay(currentDay);
+const findNumberDate = (date) =>{
+  let numberOfDay;
+ 
+    switch(date){
+      case "chủ nhật":
+        numberOfDay = 0;
+            break;
+      case "hai": 
+      numberOfDay = 1;    
+          break;
+      case "ba":
+        numberOfDay = 2;  
+          break;
+      case "tư":
+        numberOfDay = 3;    
+          break;
+      case "năm":
+        numberOfDay = 4;    
+          break;
+      case "sáu":
+        numberOfDay = 5;  
+          break;
+      case "bảy":
+        numberOfDay = 6;  
+          break; 
+      default:
+        numberOfDay =7;    
+          break; 
+  }
+  return numberOfDay;
+}
+
+const findDateByNumber = (number) =>{
+  let numberOfDay;
+ 
+    switch(number){
+
+  case 2:
+    numberOfDay = 'Thứ 2';  
+      break;
+  case 3:
+    numberOfDay = 'Thứ 3';    
+      break;
+  case 4:
+    numberOfDay = 'Thứ 4';    
+      break;
+  case 5:
+    numberOfDay = 'Thứ 5';  
+      break;
+  case 6:
+    numberOfDay = 'Thứ 6';  
+      break;
+  case 7:
+    numberOfDay = 'Thứ 7';
+      break;
+  default:
+    numberOfDay = 'error';
+      break;  
+  }
+  return numberOfDay;
+}
+
+exports.getTodaySchedule = (schedule,date=null) =>{
+  const currentDay = new Date().getDay();
+  let currentNoon; 
+
+  if(date === null){
+    currentNoon  =  getScheduleByDay(currentDay);
+  }else{
+    currentNoon =date;
+  }
    const result = schedule.filter(e =>
    e[Object.keys(e)[0]] === "" ||  e[Object.keys(e)[0]] === currentNoon 
 );
@@ -348,4 +418,59 @@ exports.hasBeforeYesterDayIsPreviousWeek = () =>{
     return currentNoon = "Thứ 7";
   }
       return null;
+}
+
+function TryParseInt(str,defaultValue) {
+  var retValue = defaultValue;
+  if(str !== null) {
+      if(str.length > 0) {
+          if (!isNaN(str)) {
+              retValue = parseInt(str);
+          }
+      }
+  }
+  return retValue;
+}  
+
+exports.getScheduleByDate = (inputText)=>{
+   let date;
+   let check =false;
+  // check is number;
+  if(inputText.toLowerCase().includes("thứ")){
+    const output = inputText.replace(/\'/g, '').split(/(\d+)/).filter(Boolean);  
+    output.forEach(e =>{
+      const kq =  TryParseInt(e);
+      if(kq !== 0 && kq !== null &&  typeof(kq) != 'undefined'){
+      
+             if(kq.toString().length === 1 ){
+                const thu = parseInt(kq);
+                  date = findDateByNumber(thu);
+                  check =true;
+             }
+             else{ 
+                return "Không tìm thấy lịch bạn yêu cầu!"
+             }
+      }
+    })
+    if(!check){
+      const textDate = output[0].toLowerCase().trim();
+      const strSplit =  textDate.split(' ');
+      const indexSearch = strSplit.indexOf('thứ');
+      if(indexSearch !== -1){
+      const strDate = strSplit[indexSearch+1].toString().toLowerCase();
+       const numberDate = findNumberDate(strDate);
+       date = getScheduleByDay(numberDate);  
+        
+      }     
+    }
+   
+  }else if(inputText.toLowerCase().includes("chủ nhật")){
+     date = getScheduleByDay(0);
+   
+  }
+  else if(inputText.toLowerCase().includes("đầu tuần")){
+    date = getScheduleByDay(1);
+  
+ }
+  return date;
 }
