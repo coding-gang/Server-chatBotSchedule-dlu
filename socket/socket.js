@@ -150,6 +150,9 @@ io.on("connection", socket => {
                   socket.emit("send-schedule",scheduleByDatePreviousWeek);                  
                  } 
                  break;   
+                 case "MSSV":
+                  socket.emit("send-schedule",`Mã số sinh viên của bạn là:${data.mssv}`);
+                   break;
             default:
               socket.emit("send-schedule","Xin lỗi, tôi không hiểu ý bạn!");
               break;

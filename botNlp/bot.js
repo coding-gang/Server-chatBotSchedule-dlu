@@ -101,8 +101,10 @@ exports.trainBot = async () => {
     nlp.addDocument('vi', 'thời khóa biểu chiều hôm qua', 'greetings.khoaBieuHomQua');
     nlp.addDocument('vi', 'thời khóa biểu tối hôm qua', 'greetings.khoaBieuHomQua');
     
-    
-
+    nlp.addDocument('vi', 'mã số sinh viên của tôi', 'greetings.MaSoSinhVien');
+    nlp.addDocument('vi', 'mssv của tôi', 'greetings.MaSoSinhVien');
+    nlp.addDocument('vi', 'xem mã số sinh viên', 'greetings.MaSoSinhVien');
+    nlp.addDocument('vi', 'xem mssv', 'greetings.MaSoSinhVien');
     // Train also the NLG
     nlp.addAnswer('vi', 'greetings.khoabieuTrongTuan', 'trong tuần');  
     nlp.addAnswer('vi', 'greetings.khoaBieuHomNay', 'hôm nay');  
@@ -116,6 +118,7 @@ exports.trainBot = async () => {
     nlp.addAnswer('vi', 'greetings.khoabieuThuTrongTuan', 'thứ trong tuần'); 
     nlp.addAnswer('vi', 'greetings.khoabieuThuTuanSau', 'thứ tuần sau');
     nlp.addAnswer('vi', 'greetings.khoabieuThuTuanTruoc', 'thứ tuần trước');
+    nlp.addAnswer('vi', 'greetings.MaSoSinhVien', 'MSSV');
     await nlp.train();
     return nlp;
   };
