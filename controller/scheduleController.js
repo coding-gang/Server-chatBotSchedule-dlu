@@ -5,8 +5,6 @@ const {
 
   } = require('api-dlu');
 
-
-
   let yearStudy = "";
   let termID = "";
   let week="";
@@ -38,11 +36,13 @@ const SaveScheduleFromDB  = async (data , studentId , params)=>{
 };
 
 const UpdateAndRemoveSchedule = async (studentId,result , weekCurrent) =>{
+    
     let weekUpdate = parseInt(weekCurrent);    
       // check datetime in week
-      const weeks = result.map(x => x.week); 
-          
-  if(weeks[0] < weekUpdate && weekUpdate === weeks[2] ){        
+    const weeks = result.map(x => x.week); 
+    getWeek(new Date());
+  
+    if(weeks[0] < weekUpdate && weekUpdate === weeks[2] ){        
   const result =  await Schedule.findOneAndRemove({ studentId: studentId , week: weeks[0] });       
              if(result){        
               weekUpdate = weekUpdate +1;   
@@ -68,7 +68,7 @@ const UpdateAndRemoveSchedule = async (studentId,result , weekCurrent) =>{
              } 
   }
         
- else if(weekUpdate > weeks[2]){
+ else if(weekUpdate > weeks[2] || weekUpdate === week){
   const result  = await Schedule.deleteMany({studentId:studentId});
      if(result){
   await getSchedulefunc(studentId,result.yearStudy,result.termID,weekUpdate);
@@ -78,7 +78,8 @@ const UpdateAndRemoveSchedule = async (studentId,result , weekCurrent) =>{
         message: 'Error'
       };
      }
-  }
+   }
+
   // default current week;
   await performSyncScheduleFunctions(studentId,result[0].yearStudy,result[0].termID, weekCurrent);
   let data = await  handleDataScheduleToJSON();
@@ -204,70 +205,6 @@ const getYearAndTermStudy = () => {
   }
 };
 
-
-const getScheduleByDay = (dayOfWeekNumber) =>{
-  let nameOfDay;
- 
-    switch(dayOfWeekNumber){
-      case 0: 
-          nameOfDay = 'Chủ nhật';    
-          break;
-      case 1:
-          nameOfDay = 'Thứ 2';  
-          break;
-      case 2:
-          nameOfDay = 'Thứ 3';    
-          break;
-      case 3:
-          nameOfDay = 'Thứ 4';    
-          break;
-      case 4:
-          nameOfDay = 'Thứ 5';  
-          break;
-      case 5:
-          nameOfDay = 'Thứ 6';  
-          break;
-      case 6:
-          nameOfDay = 'Thứ 7';
-          break;
-      case 7:
-          nameOfDay = 'error';
-          break;  
-  }
-  return nameOfDay;
-}
-
-const findNumberDate = (date) =>{
-  let numberOfDay;
- 
-    switch(date){
-      case "chủ nhật":
-        numberOfDay = 0;
-            break;
-      case "hai": 
-      numberOfDay = 1;    
-          break;
-      case "ba":
-        numberOfDay = 2;  
-          break;
-      case "tư":
-        numberOfDay = 3;    
-          break;
-      case "năm":
-        numberOfDay = 4;    
-          break;
-      case "sáu":
-        numberOfDay = 5;  
-          break;
-      case "bảy":
-        numberOfDay = 6;  
-          break; 
-      default:
-        numberOfDay =7;    
-          break; 
-  }
-  return numberOfDay;
-}
 
 const findDateByNumber = (number) =>{
   let numberOfDay;
@@ -473,4 +410,69 @@ exports.getScheduleByDate = (inputText)=>{
   
  }
   return date;
+}
+
+
+const getScheduleByDay = (dayOfWeekNumber) =>{
+  let nameOfDay;
+ 
+    switch(dayOfWeekNumber){
+      case 0: 
+          nameOfDay = 'Chủ nhật';    
+          break;
+      case 1:
+          nameOfDay = 'Thứ 2';  
+          break;
+      case 2:
+          nameOfDay = 'Thứ 3';    
+          break;
+      case 3:
+          nameOfDay = 'Thứ 4';    
+          break;
+      case 4:
+          nameOfDay = 'Thứ 5';  
+          break;
+      case 5:
+          nameOfDay = 'Thứ 6';  
+          break;
+      case 6:
+          nameOfDay = 'Thứ 7';
+          break;
+      case 7:
+          nameOfDay = 'error';
+          break;  
+  }
+  return nameOfDay;
+}
+
+const findNumberDate = (date) =>{
+  let numberOfDay;
+ 
+    switch(date){
+      case "chủ nhật":
+        numberOfDay = 0;
+            break;
+      case "hai": 
+      numberOfDay = 1;    
+          break;
+      case "ba":
+        numberOfDay = 2;  
+          break;
+      case "tư":
+        numberOfDay = 3;    
+          break;
+      case "năm":
+        numberOfDay = 4;    
+          break;
+      case "sáu":
+        numberOfDay = 5;  
+          break;
+      case "bảy":
+        numberOfDay = 6;  
+          break; 
+      default:
+        numberOfDay =7;    
+          break; 
+  }
+  return numberOfDay;
 }

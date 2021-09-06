@@ -42,6 +42,8 @@ exports.trainBot = async () => {
     nlp.addDocument('vi', 'đầu tuần này', 'greetings.khoabieuThuTrongTuan');
     nlp.addDocument('vi', 'khóa biểu đầu tuần này', 'greetings.khoabieuThuTrongTuan');
 
+   
+
     nlp.addDocument('vi', 'thời khóa biểu thứ tuần sau', 'greetings.khoabieuThuTuanSau');
     nlp.addDocument('vi', 'thời khóa biểu thứ sau', 'greetings.khoabieuThuTuanSau');
     nlp.addDocument('vi', 'thời khóa biểu thứ trong tuần sau', 'greetings.khoabieuThuTuanSau');
@@ -77,6 +79,29 @@ exports.trainBot = async () => {
     nlp.addDocument('vi', 'chủ nhật tuần trước', 'greetings.khoabieuThuTuanTruoc');
     nlp.addDocument('vi', 'đầu tuần trước', 'greetings.khoabieuThuTuanTruoc');
     nlp.addDocument('vi', 'khóa biểu đầu tuần trước', 'greetings.khoabieuThuTuanTruoc');
+
+    nlp.addDocument('vi', 'thời khóa biểu sáng nay', 'greetings.khoaBieuHomNay');
+    nlp.addDocument('vi', 'thời khóa biểu chiều nay', 'greetings.khoaBieuHomNay');
+    nlp.addDocument('vi', 'thời khóa biểu tối nay', 'greetings.khoaBieuHomNay');
+
+    nlp.addDocument('vi', 'thời khóa biểu sáng mai', 'greetings.khoaBieuNgayMai');
+    nlp.addDocument('vi', 'thời khóa biểu chiều mai', 'greetings.khoaBieuNgayMai');
+    nlp.addDocument('vi', 'thời khóa biểu tối mai', 'greetings.khoaBieuNgayMai');
+
+    nlp.addDocument('vi', 'thời khóa biểu sáng mốt', 'greetings.khoaBieuNgayMot');
+    nlp.addDocument('vi', 'thời khóa biểu chiều mốt', 'greetings.khoaBieuNgayMot');
+    nlp.addDocument('vi', 'thời khóa biểu tối mốt', 'greetings.khoaBieuNgayMot');
+
+    nlp.addDocument('vi', 'thời khóa biểu sáng hôm kia', 'greetings.khoaBieuNgayMot');
+    nlp.addDocument('vi', 'thời khóa biểu chiều hôm kia', 'greetings.khoaBieuNgayMot');
+    nlp.addDocument('vi', 'thời khóa biểu tối hôm kia', 'greetings.khoaBieuNgayMot');
+
+
+    nlp.addDocument('vi', 'thời khóa biểu sáng hôm qua', 'greetings.khoaBieuHomQua');
+    nlp.addDocument('vi', 'thời khóa biểu chiều hôm qua', 'greetings.khoaBieuHomQua');
+    nlp.addDocument('vi', 'thời khóa biểu tối hôm qua', 'greetings.khoaBieuHomQua');
+    
+    
 
     // Train also the NLG
     nlp.addAnswer('vi', 'greetings.khoabieuTrongTuan', 'trong tuần');  
