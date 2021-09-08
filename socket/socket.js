@@ -153,6 +153,9 @@ io.on("connection", socket => {
                  case "MSSV":
                   socket.emit("send-schedule",`Mã số sinh viên của bạn là:${data.mssv}`);
                    break;
+                 case "xin chao":
+                  socket.emit("send-schedule","Chào bạn! Tôi có thể cho bạn xem thời khóa biểu của bạn");
+                   break;
             default:
               socket.emit("send-schedule","Xin lỗi, tôi không hiểu ý bạn!");
               break;
