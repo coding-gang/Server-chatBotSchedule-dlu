@@ -193,21 +193,6 @@ exports.trainBot = async () => {
     nlp.addDocument('vi', 'ngày hôm kia học môn gì', 'greetings.khoaBieuNgayHomKia');
     nlp.addDocument('vi', 'ngày hôm kia có môn gì', 'greetings.khoaBieuNgayHomKia');
     
-    nlp.addDocument('vi', 'mssv thời khóa biểu thứ', 'greetings.khoabieuThuTrongTuan');
-    nlp.addDocument('vi', 'mã số sinh viên thời khóa biểu thứ', 'greetings.khoabieuThuTrongTuan');
-    nlp.addDocument('vi', 'thời khóa biểu thứ tuần này', 'greetings.khoabieuThuTrongTuan');
-    nlp.addDocument('vi', 'thời khóa biểu thứ trong tuần', 'greetings.khoabieuThuTrongTuan');
-    nlp.addDocument('vi', 'thời khóa biểu chủ nhật trong tuần', 'greetings.khoabieuThuTrongTuan');
-    nlp.addDocument('vi', 'thời khóa biểu chủ nhật tuần này', 'greetings.khoabieuThuTrongTuan');
-    nlp.addDocument('vi', 'chủ nhật tuần này', 'greetings.khoabieuThuTrongTuan');
-    nlp.addDocument('vi', 'đầu tuần này', 'greetings.khoabieuThuTrongTuan');
-    nlp.addDocument('vi', 'thứ đầu tuần này', 'greetings.khoabieuThuTrongTuan');
-    nlp.addDocument('vi', 'khóa biểu đầu tuần này', 'greetings.khoabieuThuTrongTuan');
-    nlp.addDocument('vi', 'thứ tuần này học môn gì', 'greetings.khoabieuThuTrongTuan');
-    nlp.addDocument('vi', 'thứ trong tuần học môn gì', 'greetings.khoabieuThuTrongTuan');
-    nlp.addDocument('vi', 'thứ tuần này có môn gì', 'greetings.khoabieuThuTrongTuan');
-    nlp.addDocument('vi', 'thứ trong tuần có môn gì', 'greetings.khoabieuThuTrongTuan');
-
     nlp.addDocument('vi', 'mssv thời khóa biểu thứ tuần sau', 'greetings.khoabieuThuTuanSau');
     nlp.addDocument('vi', 'mã số sinh viên thời khóa biểu thứ tuần sau', 'greetings.khoabieuThuTuanSau');
     nlp.addDocument('vi', 'thời khóa biểu thứ tuần sau', 'greetings.khoabieuThuTuanSau');
@@ -231,6 +216,21 @@ exports.trainBot = async () => {
     nlp.addDocument('vi', 'thứ tuần sau có môn gì', 'greetings.khoabieuThuTuanSau');
     nlp.addDocument('vi', 'thứ tuần tới có môn gì', 'greetings.khoabieuThuTuanSau');
 
+    nlp.addDocument('vi', 'mssv thời khóa biểu thứ', 'greetings.khoabieuThuTrongTuan');
+    nlp.addDocument('vi', 'mã số sinh viên thời khóa biểu thứ', 'greetings.khoabieuThuTrongTuan');
+    nlp.addDocument('vi', 'thời khóa biểu thứ tuần này', 'greetings.khoabieuThuTrongTuan');
+    nlp.addDocument('vi', 'thời khóa biểu thứ trong tuần', 'greetings.khoabieuThuTrongTuan');
+    nlp.addDocument('vi', 'thời khóa biểu chủ nhật trong tuần', 'greetings.khoabieuThuTrongTuan');
+    nlp.addDocument('vi', 'thời khóa biểu chủ nhật tuần này', 'greetings.khoabieuThuTrongTuan');
+    nlp.addDocument('vi', 'chủ nhật tuần này', 'greetings.khoabieuThuTrongTuan');
+    nlp.addDocument('vi', 'đầu tuần này', 'greetings.khoabieuThuTrongTuan');
+    nlp.addDocument('vi', 'thứ đầu tuần này', 'greetings.khoabieuThuTrongTuan');
+    nlp.addDocument('vi', 'khóa biểu đầu tuần này', 'greetings.khoabieuThuTrongTuan');
+    nlp.addDocument('vi', 'thứ tuần này học môn gì', 'greetings.khoabieuThuTrongTuan');
+    nlp.addDocument('vi', 'thứ trong tuần học môn gì', 'greetings.khoabieuThuTrongTuan');
+    nlp.addDocument('vi', 'thứ tuần này có môn gì', 'greetings.khoabieuThuTrongTuan');
+    nlp.addDocument('vi', 'thứ trong tuần có môn gì', 'greetings.khoabieuThuTrongTuan');
+    
     nlp.addDocument('vi', 'mssv thời khóa biểu thứ tuần vừa rồi', 'greetings.khoabieuThuTuanTruoc');
     nlp.addDocument('vi', 'mã số sinh viên thời khóa biểu thứ tuần vừa rồi', 'greetings.khoabieuThuTuanTruoc');
     nlp.addDocument('vi', 'thời khóa biểu thứ vừa rồi', 'greetings.khoabieuThuTuanTruoc');
