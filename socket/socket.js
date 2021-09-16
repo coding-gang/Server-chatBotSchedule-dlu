@@ -28,10 +28,10 @@ const getWeek = d => {
   const week = weekNo+1;
    return week;
 }
-const nextWeek = getWeek(new Date()) +1;
-getWeekSchedule("1812866",undefined,undefined,nextWeek.toString()).then(result =>{         
-   console.log(result);
-  });
+// const nextWeek = getWeek(new Date()) +1;
+// getWeekSchedule("1812866",undefined,undefined,nextWeek.toString()).then(result =>{         
+//    console.log(result);
+//   });
 io.on("connection", socket => {
     // either with send()
     console.log(`connect success ${socket.id}`);
