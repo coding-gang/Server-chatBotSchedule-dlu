@@ -28,7 +28,10 @@ const getWeek = d => {
   const week = weekNo+1;
    return week;
 }
-
+// const nextWeek = getWeek(new Date()) +1;
+// getWeekSchedule("1812866",undefined,undefined,nextWeek.toString()).then(result =>{         
+//    console.log(result);
+//   });
 io.on("connection", socket => {
     // either with send()
     console.log(`connect success ${socket.id}`);
@@ -51,7 +54,7 @@ io.on("connection", socket => {
                   break;
               case "tuần tới":
                 sendWaiter();
-               const nextWeek =  getWeek(new Date()) +1;
+               const nextWeek = getWeek(new Date()) +1;
                 getWeekSchedule(data.mssv.toString(),undefined,undefined,nextWeek.toString()).then(result =>{         
                 socket.emit("send-schedule",result);     
                 });
