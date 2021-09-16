@@ -37,7 +37,7 @@ const SaveScheduleFromDB  = async (data , studentId , params)=>{
 
 const UpdateAndRemoveSchedule = async (studentId,result , weekCurrent) =>{
     
-    let weekUpdate = parseInt(weekCurrent);    
+    const weekUpdate = parseInt(weekCurrent);    
       // check datetime in week
     const weeks = result.map(x => x.week); 
     getWeek(new Date());
@@ -45,15 +45,15 @@ const UpdateAndRemoveSchedule = async (studentId,result , weekCurrent) =>{
     if(weeks[0] < weekUpdate && weekUpdate === weeks[2] ){        
   const result =  await Schedule.findOneAndRemove({ studentId: studentId , week: weeks[0] });       
              if(result){        
-              weekUpdate = weekUpdate +1;   
+                const weekNext = weekUpdate +1;   
           
                  yearStudy =  result.yearStudy;
                  termID = result.termID;
-                 await performSyncScheduleFunctions(studentId,yearStudy,termID, weekUpdate.toString());
+                 await performSyncScheduleFunctions(studentId,yearStudy,termID, weekNext.toString());
                let data = await handleDataScheduleToJSON();
              
                const time ={
-                weekId:weekUpdate,
+                weekId:weekNext,
                 yearStudy:yearStudy,
                 termId : termID       
             };      
