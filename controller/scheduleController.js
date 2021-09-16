@@ -127,9 +127,7 @@ const getSchedulefunc = async (studentId , yearStudys ,termIDs, weeks) =>{
                 return data;
       });
      
-      let nextWeek =week;
-         nextWeek  =(parseInt(nextWeek) +1);
-
+      const nextWeek =(parseInt(weekCurrent) +1);
          const timeNext ={
           weekId:nextWeek,
           yearStudy:yearStudy,
@@ -142,8 +140,7 @@ const getSchedulefunc = async (studentId , yearStudys ,termIDs, weeks) =>{
         await SaveScheduleFromDB(data,studentId, timeNext);
      
        });        
-       let lastWeek =week;
-       lastWeek = (parseInt(lastWeek) -1);
+       const lastWeek =(parseInt(weekCurrent) -1);
        const timeLast ={
         weekId:lastWeek,
         yearStudy:yearStudy,
