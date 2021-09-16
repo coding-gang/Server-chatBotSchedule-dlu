@@ -5,9 +5,9 @@ const {
 
   } = require('api-dlu');
 
-  const yearStudy=null;
-  const termID =null ;
-  const week =null;
+  const yearStudy="";
+  const termID ="" ;
+  const week ="";
 
   const date = new Date();
   const year = date.getFullYear();
