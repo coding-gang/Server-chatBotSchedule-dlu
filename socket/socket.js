@@ -7,7 +7,7 @@ const scheduleController = require('../controller/scheduleController');
 
 (async () => { nlp = await bot.trainBot() })();
 
-let week ="";
+
 
 const getWeekSchedule = async(mssv,yearStudy,termID,week) =>{
   const result = await scheduleController.getSchedule(mssv,yearStudy,termID,week);
@@ -25,8 +25,8 @@ const getWeek = d => {
   var yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
   console.log(yearStart);
   var weekNo = Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
-   week = weekNo+1;
-   
+  const week = weekNo+1;
+   return week;
 }
 
 io.on("connection", socket => {
@@ -51,16 +51,14 @@ io.on("connection", socket => {
                   break;
               case "tuần tới":
                 sendWaiter();
-                getWeek(new Date());
-                const nextWeek = parseInt(week) +1;
+               const nextWeek =  getWeek(new Date()) +1;
                 getWeekSchedule(data.mssv.toString(),undefined,undefined,nextWeek.toString()).then(result =>{         
                 socket.emit("send-schedule",result);     
                 });
                   break;     
               case "tuần trước":
                 sendWaiter();
-                getWeek(new Date());
-                const previousWeek = parseInt(week) - 1;
+                const previousWeek =  getWeek(new Date()) - 1;
                 getWeekSchedule(data.mssv.toString(),undefined,undefined,previousWeek.toString()).then(result =>{
                 socket.emit("send-schedule",result);
                     });
@@ -74,8 +72,8 @@ io.on("connection", socket => {
               case "ngày mai":
                 sendWaiter();
                 if(scheduleController.hasTomorrowIsNextWeek()){
-                  getWeek(new Date());
-                  const nextWeek = parseInt(week) +1;
+                  getWeek(new Date());        
+               const nextWeek =  getWeek(new Date()) +1;
                   const scheduleNextWeek = await getWeekSchedule(data.mssv.toString(),undefined,undefined,nextWeek.toString());
                   const result =  scheduleController.getNextDaySchedule(scheduleNextWeek,"Thứ 2");
                   socket.emit("send-schedule",result);
@@ -88,8 +86,7 @@ io.on("connection", socket => {
               case "hôm qua":
                 sendWaiter();
                   if(scheduleController.hasYesterdayIsPreviousWeek()){
-                    getWeek(new Date());
-                    const previousWeek = parseInt(week) - 1;
+                    const previousWeek =  getWeek(new Date()) - 1;
                     const schedulePreviousWeek = await getWeekSchedule(data.mssv.toString(),undefined,undefined,previousWeek.toString());
                     const result =  scheduleController.getYesterDaySchedule(schedulePreviousWeek,"Thứ 2");
                     socket.emit("send-schedule",result);
@@ -104,8 +101,7 @@ io.on("connection", socket => {
                   const currentNoon = scheduleController.hasAfterTomorrowIsNextWeek();
                   if(currentNoon !== null){
                     
-                    getWeek(new Date());
-                    const nextWeek = parseInt(week) +1;
+                    const nextWeek =  getWeek(new Date()) +1;
                     const scheduleNextWeek = await getWeekSchedule(data.mssv.toString(),undefined,undefined,nextWeek.toString());
                     const result =  scheduleController.getAfterTomorrowSchedule(scheduleNextWeek,currentNoon);
                     socket.emit("send-schedule",result);
@@ -119,8 +115,7 @@ io.on("connection", socket => {
                   sendWaiter();
                   const currentDate = scheduleController.hasBeforeYesterDayIsPreviousWeek();
                   if(currentDate !== null){                   
-                    getWeek(new Date());
-                    const previousWeek = parseInt(week) - 1;
+                    const previousWeek =  getWeek(new Date()) - 1;
                     const schedulePreviousWeek = await getWeekSchedule(data.mssv.toString(),undefined,undefined,previousWeek.toString());
                     const result =  scheduleController.getBeforeYesterDaySchedule(schedulePreviousWeek,currentDate);
                     socket.emit("send-schedule",result);
@@ -147,8 +142,7 @@ io.on("connection", socket => {
                    if(dateNextWeek === "error"){
                     socket.emit("send-schedule","Xin lỗi, tôi không hiểu ý bạn123!");
                    }else{
-                    getWeek(new Date());
-                    const nextWeek = parseInt(week) +1;
+                    const nextWeek =  getWeek(new Date()) +1;
                     const scheduleNextWeek = await getWeekSchedule(data.mssv.toString(),undefined,undefined,nextWeek.toString());
                     const scheduleByDateNextWeek = getTodaySchedule(scheduleNextWeek,dateNextWeek);        
                     socket.emit("send-schedule",scheduleByDateNextWeek);                  
@@ -160,8 +154,7 @@ io.on("connection", socket => {
                  if(datePreviousWeek === "error"){
                   socket.emit("send-schedule","Xin lỗi, tôi không hiểu ý bạn123!");
                  }else{
-                  getWeek(new Date());
-                  const previousWeekByDate = parseInt(week) - 1;
+                  const previousWeekByDate =  getWeek(new Date()) - 1;
                   const schedulePreviousWeekByDate = await getWeekSchedule(data.mssv.toString(),undefined,undefined,previousWeekByDate.toString());
                   const scheduleByDatePreviousWeek = getTodaySchedule(schedulePreviousWeekByDate,datePreviousWeek);        
                   socket.emit("send-schedule",scheduleByDatePreviousWeek);                  
