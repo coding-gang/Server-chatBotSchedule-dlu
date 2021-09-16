@@ -38,8 +38,8 @@ exports.trainBot = async () => {
     nlp.addDocument('en', 'today', 'greetings.khoaBieuHomNay');
     nlp.addDocument('en', 'today schedule', 'greetings.khoaBieuHomNay');
     nlp.addDocument('en', 'schedule today', 'greetings.khoaBieuHomNay');
-    nlp.addDocument('vi', 'hôm nay học môn gì', 'greetings.khoabieuTrongTuan');
-    nlp.addDocument('vi', 'trong tuần này có môn gì', 'greetings.khoabieuTrongTuan');
+    nlp.addDocument('vi', 'hôm nay học môn gì', 'greetings.khoaBieuHomNay');
+    nlp.addDocument('vi', 'hôm nay có môn gì', 'greetings.khoaBieuHomNay');
     nlp.addDocument('vi', 'hôm nay', 'greetings.khoaBieuHomNay');
     nlp.addDocument('vi', 'hom nay', 'greetings.khoaBieuHomNay');
     nlp.addDocument('vi', 'môn hôm nay', 'greetings.khoaBieuHomNay');
@@ -216,6 +216,7 @@ exports.trainBot = async () => {
     nlp.addDocument('vi', 'thứ tuần sau có môn gì', 'greetings.khoabieuThuTuanSau');
     nlp.addDocument('vi', 'thứ tuần tới có môn gì', 'greetings.khoabieuThuTuanSau');
 
+    nlp.addDocument('vi', 'thời khóa biểu thứ sáu tuần này', 'greetings.khoabieuThuTrongTuan');
     nlp.addDocument('vi', 'mssv thời khóa biểu thứ', 'greetings.khoabieuThuTrongTuan');
     nlp.addDocument('vi', 'mã số sinh viên thời khóa biểu thứ', 'greetings.khoabieuThuTrongTuan');
     nlp.addDocument('vi', 'thời khóa biểu thứ tuần này', 'greetings.khoabieuThuTrongTuan');
@@ -229,8 +230,11 @@ exports.trainBot = async () => {
     nlp.addDocument('vi', 'thứ tuần này học môn gì', 'greetings.khoabieuThuTrongTuan');
     nlp.addDocument('vi', 'thứ trong tuần học môn gì', 'greetings.khoabieuThuTrongTuan');
     nlp.addDocument('vi', 'thứ tuần này có môn gì', 'greetings.khoabieuThuTrongTuan');
+    nlp.addDocument('vi', 'thứ sáu tuần này có môn gì', 'greetings.khoabieuThuTrongTuan');
     nlp.addDocument('vi', 'thứ trong tuần có môn gì', 'greetings.khoabieuThuTrongTuan');
-    
+    nlp.addDocument('vi', 'thứ sáu trong tuần có môn gì', 'greetings.khoabieuThuTrongTuan');
+
+
     nlp.addDocument('vi', 'mssv thời khóa biểu thứ tuần vừa rồi', 'greetings.khoabieuThuTuanTruoc');
     nlp.addDocument('vi', 'mã số sinh viên thời khóa biểu thứ tuần vừa rồi', 'greetings.khoabieuThuTuanTruoc');
     nlp.addDocument('vi', 'thời khóa biểu thứ vừa rồi', 'greetings.khoabieuThuTuanTruoc');
