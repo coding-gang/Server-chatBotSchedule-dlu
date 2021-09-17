@@ -3,7 +3,7 @@ const {
     handleDataScheduleToJSON,
     performSyncScheduleFunctions
 
-  } = require('api-dlu');
+  } = require("../moduleApiDlu/index");
 
   let yearStudy="";
   let termID ="" ;

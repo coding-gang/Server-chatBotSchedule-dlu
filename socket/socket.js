@@ -27,9 +27,24 @@ const getWeek = d => {
    return week;
 }
 // const nextWeek = getWeek(new Date());
-// getWeekSchedule("1812867",undefined,undefined,nextWeek.toString()).then(result =>{         
-//    console.log(result);
+// getWeekSchedule("1812867",undefined,undefined,nextWeek.toString()).then(result =>{        
+//   if(Array.isArray(result)){
+//     console.log(result);
+//   }else{
+//     console.log(ERRORMESSAGE);
+//   }            
+   
 //   });
+
+  // getWeekSchedule("1812866".toString(),undefined,undefined,undefined).then(res =>{
+  //   if(Array.isArray(res)){
+  //     const result = getTodaySchedule(res);          
+  //     console.log(result);
+  //   }else{
+  //     console.log(ERRORMESSAGE);
+  //   }           
+  // });
+                
 
 io.on("connection", socket => {
     // either with send()
