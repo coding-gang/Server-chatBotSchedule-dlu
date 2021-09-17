@@ -36,12 +36,12 @@ const SaveScheduleFromDB  = async (data , studentId , params)=>{
 };
 
 const UpdateAndRemoveSchedule = async (studentId,result , weekCurrent) =>{
-    
+
     const weekUpdate = parseInt(weekCurrent);    
       // check datetime in week
     const weeks = result.map(x => x.week); 
-    getWeek(new Date());
-  
+     getWeek(new Date());
+                  
     if(weeks[0] < weekUpdate && weekUpdate === weeks[2] ){        
   const result =  await Schedule.findOneAndRemove({ studentId: studentId , week: weeks[0] });       
              if(result){        
@@ -49,16 +49,13 @@ const UpdateAndRemoveSchedule = async (studentId,result , weekCurrent) =>{
           
                  yearStudy =  result.yearStudy;
                  termID = result.termID;
-                 await performSyncScheduleFunctions(studentId,yearStudy,termID, weekNext.toString());
-               let data = await handleDataScheduleToJSON();
-             
-               const time ={
-                weekId:weekNext,
-                yearStudy:yearStudy,
-                termId : termID       
-            };      
-                  await createSchedule(data,studentId,time);     
-                
+                 let data = await performSyncScheduleFunctions(studentId,yearStudy,termID, weekNext.toString());
+                    const time ={
+                      weekId:weekNext,
+                      yearStudy:yearStudy,
+                      termId : termID       
+                     };      
+                    await createSchedule(data,studentId,time);                
              }
              else{
              return  {
@@ -79,80 +76,78 @@ const UpdateAndRemoveSchedule = async (studentId,result , weekCurrent) =>{
       };
      }
    }
-
   // default current week;
-  await performSyncScheduleFunctions(studentId,result[0].yearStudy,result[0].termID, weekCurrent);
-  let data = await  handleDataScheduleToJSON();
-  console.log(weekUpdate);
-  return data;
+ const res = await performSyncScheduleFunctions(studentId,result[0].yearStudy,result[0].termID, weekCurrent);
+  return res;
 }
 
 const getSchedulefunc = async (studentId , yearStudys ,termIDs, weeks) =>{
+        if(typeof yearStudys === 'undefined' && typeof termIDs === 'undefined'){
+          getYearAndTermStudy();
+        }else{
+          yearStudy =yearStudys;
+          termID = termIDs;
+        }
+        if( typeof weeks === 'undefined')
+        {    
+          getWeek(new Date());  
+        console.log(`${termID}-${yearStudy}-${week}`)
+        }
+        else{ 
+        week = weeks;         
+        } 
+        const weekCurrent =week;
+        const timeCurrent ={
+          weekId:weekCurrent,
+          yearStudy:yearStudy,
+          termId : termID       
+        };
 
-      const result = await Schedule.find({studentId: studentId}); 
+        const result = await Schedule.find({studentId: studentId});      
+        const schedule = await performSyncScheduleFunctions(studentId, timeCurrent.yearStudy, timeCurrent.termId, weekCurrent);
+       
+  if(schedule === null && result.length === 3){
+      const kq = await getScheduleFromDB(studentId,weekCurrent);
+      return kq;
+  }
+  
+  if(schedule !== null){
 
-      if( typeof yearStudys === 'undefined' && typeof termIDs === 'undefined'){
-        getYearAndTermStudy();
-      }else{
-        yearStudy =yearStudys;
-        termID = termIDs;
-      }
-      if( typeof weeks === 'undefined')
-      {    
-        getWeek(new Date());  
-      console.log(`${termID}-${yearStudy}-${week}`)
-      }
-      else{ 
-      week = weeks;         
-      }
-     
-      const weekCurrent =week;
-      const timeCurrent ={
-        weekId:weekCurrent,
-        yearStudy:yearStudy,
-        termId : termID       
-    };
-    
-    if(result.length === 3 ){     
+    if(result.length === 3){     
         result.sort( (a, b) => a.week - b.week );
       const kq =  await UpdateAndRemoveSchedule(studentId,result,weekCurrent);   
         return kq;
-    }
-   
+    }else{
+    
+      await SaveScheduleFromDB(schedule,studentId, timeCurrent);
 
-     const schedule = await performSyncScheduleFunctions(studentId, timeCurrent.yearStudy, timeCurrent.termId, weekCurrent)
-      .then(kq => handleDataScheduleToJSON()).then( async data => {    
-              
-     await SaveScheduleFromDB(data,studentId, timeCurrent);
-                return data;
-      });
-     
       const nextWeek =(parseInt(weekCurrent) +1);
-         const timeNext ={
-          weekId:nextWeek,
-          yearStudy:yearStudy,
-          termId : termID       
-      };
-       //save schedule next week
-       await performSyncScheduleFunctions(studentId, timeNext.yearStudy, timeNext.termId, nextWeek.toString())
-       .then(kq => handleDataScheduleToJSON()).then( async data => {
-       
-        await SaveScheduleFromDB(data,studentId, timeNext);
-     
-       });        
-       const lastWeek =(parseInt(weekCurrent) -1);
-       const timeLast ={
-        weekId:lastWeek,
-        yearStudy:yearStudy,
-        termId : termID       
-    };
-     //  save schedule last week
-       await performSyncScheduleFunctions(studentId, timeLast.yearStudy, timeLast.termId, lastWeek.toString())
-       .then(kq => handleDataScheduleToJSON()).then( async data => {
-      
-        await SaveScheduleFromDB(data,studentId, timeLast);
-       });    
-   return schedule;
+      const timeNext ={
+       weekId:nextWeek,
+       yearStudy:yearStudy,
+       termId : termID       
+   };
+    //save schedule next week
+    await performSyncScheduleFunctions(studentId, timeNext.yearStudy, timeNext.termId, nextWeek.toString())
+    .then( async data => {   
+     await SaveScheduleFromDB(data,studentId, timeNext);
+    });        
+    const lastWeek =(parseInt(weekCurrent) -1);
+    const timeLast ={
+     weekId:lastWeek,
+     yearStudy:yearStudy,
+     termId : termID       
+ };
+  //  save schedule last week
+    await performSyncScheduleFunctions(studentId, timeLast.yearStudy, timeLast.termId, lastWeek.toString())
+    .then( async data => {
+     await SaveScheduleFromDB(data,studentId, timeLast);
+    });   
+    return schedule;
+    }     
+    }else{
+          return "Xin lỗi bạn, có vấn đề về kết nối bạn hãy thử lại sau";
+        }
 }
 
 const createSchedule = async (data , studentId ,params) =>{
@@ -472,4 +467,46 @@ const findNumberDate = (date) =>{
           break; 
   }
   return numberOfDay;
+}
+
+function repalceTitle(tab){
+      
+      let newKeyMappings = {
+        thu:  '0',
+        sang: 'Sáng',
+        chieu:'Chiều',
+        toi:  'Tối'
+      };
+
+        let mapped = Object.keys(tab).map(oldKey=> {
+          let newKey = newKeyMappings[oldKey];
+          let result ={};
+          result[newKey]=tab[oldKey];
+          return result;
+        });
+        let result = mapped.reduce((result, item)=> {
+          let key = Object.keys(item)[0];
+          result[key] = item[key];
+          return result;
+        }, {});
+
+        return result;
+}
+
+const getScheduleFromDB = async(studentId,weekCurrent)=>{
+  const result = await Schedule.find({studentId: studentId, week:weekCurrent});
+  const arrNewValue =[{ '0': '', 'Sáng': 'Sáng', 'Chiều': 'Chiều', 'Tối': 'Tối' }];
+   if(result !== []){
+  for (const element of  result[0].schedules) {
+    const tab = {
+      thu: element.thu,
+      sang: element.sang,
+      chieu: element.chieu,
+      toi: element.toi
+    };
+    const newValue = repalceTitle(tab);
+    arrNewValue.push(newValue);
+  }
+  return arrNewValue;
+}
 }
