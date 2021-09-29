@@ -80,104 +80,189 @@ io.on("connection", socket => {
                 sendWaiter();           
                  const schedules = await scheduleController.getScheduleSpecifyByCalendar(data.mssv.toString(),undefined,undefined,undefined);
                  if(schedules === null){
-                  const kqFromDB = await ScheduleGetDB.getSchedule(mssv,yearStudy,termID,weeks);
+                  const kqFromDB = await ScheduleGetDB.getSchedule(data.mssv.toString(),undefined,undefined,undefined);
                   socket.emit("send-schedule",kqFromDB);    
+                 }else{
+                  socket.emit("send-schedule",schedules);   
                  }
-               socket.emit("send-schedule",schedules);   
+                 await getWeekSchedule(data.mssv.toString(),undefined,undefined,undefined);
                  break;
+
                 case "tuần tới":
                   sendWaiter();
                  const nextWeek = getWeek(new Date()) +1;
-                  getWeekSchedule(data.mssv.toString(),undefined,undefined,nextWeek.toString()).then(result =>{         
-                  socket.emit("send-schedule",result);     
-                  });
+                const schedulesNextWeek = await scheduleController.getScheduleSpecifyByCalendar(data.mssv.toString(),undefined,undefined,nextWeek);
+                 if(schedules === null){
+                  const kqFromDB = await ScheduleGetDB.getSchedule(data.mssv.toString(),undefined,undefined,nextWeek);
+                  socket.emit("send-schedule",kqFromDB);    
+                 }else{
+                  socket.emit("send-schedule",schedulesNextWeek); 
+                 }
+                 await getWeekSchedule(data.mssv.toString(),undefined,undefined,nextWeek);
                     break;     
                 case "tuần trước":
                   sendWaiter();
                   const previousWeek =  getWeek(new Date()) - 1;
-                  getWeekSchedule(data.mssv.toString(),undefined,undefined,previousWeek.toString()).then(result =>{
-                  socket.emit("send-schedule",result);
-                      });
+                  const schedulesPreviousWeek = await scheduleController.getScheduleSpecifyByCalendar(data.mssv.toString(),undefined,undefined,previousWeek);
+                 if(schedules === null){
+                  const kqFromDB = await ScheduleGetDB.getSchedule(data.mssv.toString(),undefined,undefined,previousWeek);
+                  socket.emit("send-schedule",kqFromDB);    
+                 }else{
+                  socket.emit("send-schedule",schedulesPreviousWeek); 
+                 }
+                 await getWeekSchedule(data.mssv.toString(),undefined,undefined,previousWeek);
                         break;    
                 case "hôm nay":
                   sendWaiter();
-                  const schedule = await getWeekSchedule(data.mssv.toString(),undefined,undefined,undefined);
-                  if(Array.isArray(schedule)){
-                    const result = getTodaySchedule(schedule);          
-                    socket.emit("send-schedule",result);
-                  }else{
-                    socket.emit("send-schedule",ERRORMESSAGE);
-                  }           
+                  const schedule = await scheduleController.getScheduleSpecifyByCalendar(data.mssv.toString(),undefined,undefined,undefined);
+                  if(schedule === null){
+                    const kqFromDB = await ScheduleGetDB.getSchedule(data.mssv.toString(),undefined,undefined,undefined);
+                    if(Array.isArray(kqFromDB)){                        
+                      const result = getTodaySchedule(kqFromDB);  
+                     socket.emit("send-schedule",result);
+                       }else{
+                         socket.emit("send-schedule",ERRORMESSAGE);
+                       }
+                   }else{
+                    if(Array.isArray(schedule)){
+                      const result = getTodaySchedule(schedule);          
+                      socket.emit("send-schedule",result);
+                    }else{
+                      socket.emit("send-schedule",ERRORMESSAGE);
+                    }   
+                   } 
+                   await getWeekSchedule(data.mssv.toString(),undefined,undefined,undefined);
                         break; 
                 case "ngày mai":
                   sendWaiter();
                   if(scheduleController.hasTomorrowIsNextWeek()){
                     getWeek(new Date());        
                  const nextWeek =  getWeek(new Date()) +1;
-                    const scheduleNextWeek = await getWeekSchedule(data.mssv.toString(),undefined,undefined,nextWeek.toString());
-                    if(Array.isArray(scheduleNextWeek)){
-                      const result =  scheduleController.getNextDaySchedule(scheduleNextWeek,"Thứ 2");
-                      socket.emit("send-schedule",result);
-                    }else{
-                      socket.emit("send-schedule",ERRORMESSAGE);
-                    }           
-                    
+                 const scheduleNextWeek = await scheduleController.getScheduleSpecifyByCalendar(data.mssv.toString(),undefined,undefined,nextWeek.toString());
+                 if(scheduleNextWeek === null){
+                  const kqFromDB = await ScheduleGetDB.getSchedule(data.mssv.toString(),undefined,undefined,nextWeek.toString());
+                  if(Array.isArray(kqFromDB)){
+                    const result =  scheduleController.getNextDaySchedule(kqFromDB,"Thứ 2");
+                    socket.emit("send-schedule",result);
                   }else{
-                    const schedule = await getWeekSchedule(data.mssv.toString(),undefined,undefined,undefined);
-                    if(Array.isArray(schedule)){
-                      const result =  scheduleController.getNextDaySchedule(schedule,null);
+                    socket.emit("send-schedule",ERRORMESSAGE);
+                  }  
+                }else{
+                  if(Array.isArray(scheduleNextWeek)){
+                    const result =  scheduleController.getNextDaySchedule(scheduleNextWeek,"Thứ 2");
+                    socket.emit("send-schedule",result);
+                  }else{
+                    socket.emit("send-schedule",ERRORMESSAGE);
+                  }   
+                }    
+                await getWeekSchedule(data.mssv.toString(),undefined,undefined,nextWeek.toString());
+                  }else{
+                    const scheduleNextWeek = await scheduleController.getScheduleSpecifyByCalendar(data.mssv.toString(),undefined,undefined,undefined);
+                    if(scheduleNextWeek === null){
+                     const kqFromDB = await ScheduleGetDB.getSchedule(data.mssv.toString(),undefined,undefined,undefined);
+                     if(Array.isArray(kqFromDB)){
+                       const result =  scheduleController.getNextDaySchedule(kqFromDB,"Thứ 2");
+                       socket.emit("send-schedule",result);
+                     }else{
+                       socket.emit("send-schedule",ERRORMESSAGE);
+                     }  
+                   }else{
+                    if(Array.isArray(scheduleNextWeek)){
+                      const result =  scheduleController.getNextDaySchedule(scheduleNextWeek,null);
                       socket.emit("send-schedule",result);
                     }else{
                       socket.emit("send-schedule",ERRORMESSAGE);
-                    }                  
+                    }
+                   }   
+                   await getWeekSchedule(data.mssv.toString(),undefined,undefined,undefined);                          
                   }
                         break; 
                 case "hôm qua":
-                  sendWaiter();
+                    sendWaiter();
                     if(scheduleController.hasYesterdayIsPreviousWeek()){
                       const previousWeek =  getWeek(new Date()) - 1;
-                      const schedulePreviousWeek = await getWeekSchedule(data.mssv.toString(),undefined,undefined,previousWeek.toString());
-                     
-                      if(Array.isArray(schedulePreviousWeek)){
-                        const result =  scheduleController.getYesterDaySchedule(schedulePreviousWeek,"Thứ 2");
-                      socket.emit("send-schedule",result);
-                      }else{
-                        socket.emit("send-schedule",ERRORMESSAGE);
-                      }
-  
-                    }else{
-                      const schedule = await getWeekSchedule(data.mssv.toString(),undefined,undefined,undefined);
-                      if(Array.isArray(schedule)){
-                        const result =  scheduleController.getYesterDaySchedule(schedule);
+                      const schedulePreviousWeek = await scheduleController.getScheduleSpecifyByCalendar(data.mssv.toString(),undefined,undefined,previousWeek.toString());            
+                       if(schedulePreviousWeek === null){
+                        const kqFromDB = await ScheduleGetDB.getSchedule(data.mssv.toString(),undefined,undefined,previousWeek.toString());
+                        if(Array.isArray(kqFromDB)){
+                          const result =  scheduleController.getYesterDaySchedule(kqFromDB,"Thứ 2");
                         socket.emit("send-schedule",result);
-                      }else{
-                        socket.emit("send-schedule",ERRORMESSAGE);
-                      }               
+                        }else{
+                          socket.emit("send-schedule",ERRORMESSAGE);
+                        }
+                       }else{
+                        if(Array.isArray(schedulePreviousWeek)){
+                          const result =  scheduleController.getYesterDaySchedule(schedulePreviousWeek,"Thứ 2");
+                        socket.emit("send-schedule",result);
+                        }else{
+                          socket.emit("send-schedule",ERRORMESSAGE);
+                        }
+                       }
+                       await getWeekSchedule(data.mssv.toString(),undefined,undefined,previousWeek.toString()); 
+                    }   
+                    else{
+                      const schedule = await scheduleController.getScheduleSpecifyByCalendar(data.mssv.toString(),undefined,undefined,undefined);            
+                      if(schedulePreviousWeek === null){
+                        const kqFromDB = await ScheduleGetDB.getSchedule(data.mssv.toString(),undefined,undefined,undefined);
+                        if(Array.isArray(kqFromDB)){
+                          const result =  scheduleController.getYesterDaySchedule(kqFromDB);
+                          socket.emit("send-schedule",result);
+                        }else{
+                          socket.emit("send-schedule",ERRORMESSAGE);
+                        }  
+                       }else{
+                        if(Array.isArray(schedule)){
+                          const result =  scheduleController.getYesterDaySchedule(schedule);
+                          socket.emit("send-schedule",result);
+                        }else{
+                          socket.emit("send-schedule",ERRORMESSAGE);
+                        }  
+                       }
+                       await getWeekSchedule(data.mssv.toString(),undefined,undefined,undefined); 
                     }
                          break;
                   case "ngày mốt":
                     sendWaiter();
                     const currentNoon = scheduleController.hasAfterTomorrowIsNextWeek();
-                    if(currentNoon !== null){
-                      
+                    if(currentNoon !== null){             
                       const nextWeek =  getWeek(new Date()) +1;
-                      const scheduleNextWeek = await getWeekSchedule(data.mssv.toString(),undefined,undefined,nextWeek.toString());
-                      
-                      if(Array.isArray(scheduleNextWeek)){            
-                      const result =  scheduleController.getAfterTomorrowSchedule(scheduleNextWeek,currentNoon);
-                      socket.emit("send-schedule",result);
+                      const scheduleNextWeek = await scheduleController.getScheduleSpecifyByCalendar(data.mssv.toString(),undefined,undefined,nextWeek.toString());               
+                       if(scheduleNextWeek === null){
+                        const kqFromDB = await ScheduleGetDB.getSchedule(data.mssv.toString(),undefined,undefined,nextWeek.toString());
+                        if(Array.isArray(kqFromDB)){            
+                          const result =  scheduleController.getAfterTomorrowSchedule(kqFromDB,currentNoon);
+                          socket.emit("send-schedule",result);
+                          }else{
+                            socket.emit("send-schedule",ERRORMESSAGE);
+                          }  
                       }else{
-                        socket.emit("send-schedule",ERRORMESSAGE);
-                      }    
-                                
+                        if(Array.isArray(scheduleNextWeek)){            
+                          const result =  scheduleController.getAfterTomorrowSchedule(scheduleNextWeek,currentNoon);
+                          socket.emit("send-schedule",result);
+                          }else{
+                            socket.emit("send-schedule",ERRORMESSAGE);
+                          }    
+                      }
+                      await getWeekSchedule(data.mssv.toString(),undefined,undefined,nextWeek.toString());          
                     }else{
-                      const schedule = await getWeekSchedule(data.mssv.toString(),undefined,undefined,undefined);
-                      if(Array.isArray(schedule)){            
-                        const result =  scheduleController.getAfterTomorrowSchedule(schedule);
-                        socket.emit("send-schedule",result);
-                        }else{
-                          socket.emit("send-schedule",ERRORMESSAGE);
-                        }    
+                      const schedule = await scheduleController.getScheduleSpecifyByCalendar(data.mssv.toString(),undefined,undefined,undefined);               
+                      if(schedule === null){
+                        const kqFromDB = await ScheduleGetDB.getSchedule(data.mssv.toString(),undefined,undefined,undefined);
+                        if(Array.isArray(kqFromDB)){            
+                          const result =  scheduleController.getAfterTomorrowSchedule(kqFromDB);
+                          socket.emit("send-schedule",result);
+                          }else{
+                            socket.emit("send-schedule",ERRORMESSAGE);
+                          } 
+                      }else{
+                        if(Array.isArray(schedule)){            
+                          const result =  scheduleController.getAfterTomorrowSchedule(schedule);
+                          socket.emit("send-schedule",result);
+                          }else{
+                            socket.emit("send-schedule",ERRORMESSAGE);
+                          }  
+                      }
+                      await getWeekSchedule(data.mssv.toString(),undefined,undefined,undefined); 
                     }
                        break;      
                   case "hôm kia":
@@ -185,23 +270,45 @@ io.on("connection", socket => {
                     const currentDate = scheduleController.hasBeforeYesterDayIsPreviousWeek();
                     if(currentDate !== null){                   
                       const previousWeek =  getWeek(new Date()) - 1;
-                      const schedulePreviousWeek = await getWeekSchedule(data.mssv.toString(),undefined,undefined,previousWeek.toString());
+
+                      const schedulePreviousWeek = await scheduleController.getScheduleSpecifyByCalendar(data.mssv.toString(),undefined,undefined,previousWeek.toString());               
+                      if(schedulePreviousWeek === null){
+                        const kqFromDB = await ScheduleGetDB.getSchedule(data.mssv.toString(),undefined,undefined,previousWeek.toString());
+                        if(Array.isArray(kqFromDB)){                        
+                          const result =  scheduleController.getBeforeYesterDaySchedule(kqFromDB,currentDate);
+                          socket.emit("send-schedule",result);
+                            }else{
+                              socket.emit("send-schedule",ERRORMESSAGE);
+                            }  
                       
-                      if(Array.isArray(schedulePreviousWeek)){                        
-                      const result =  scheduleController.getBeforeYesterDaySchedule(schedulePreviousWeek,currentDate);
-                      socket.emit("send-schedule",result);
-                        }else{
-                          socket.emit("send-schedule",ERRORMESSAGE);
-                        }  
-  
+                      }else{
+                        if(Array.isArray(schedulePreviousWeek)){                        
+                          const result =  scheduleController.getBeforeYesterDaySchedule(schedulePreviousWeek,currentDate);
+                          socket.emit("send-schedule",result);
+                            }else{
+                              socket.emit("send-schedule",ERRORMESSAGE);
+                            }  
+                      }
+                      await getWeekSchedule(data.mssv.toString(),undefined,undefined,previousWeek.toString()); 
                     }else{
-                      const schedule = await getWeekSchedule(data.mssv.toString(),undefined,undefined,undefined);
-                      if(Array.isArray(schedule)){                        
-                        const result =  scheduleController.getBeforeYesterDaySchedule(schedule);
-                        socket.emit("send-schedule",result);
+                      const schedule = await scheduleController.getScheduleSpecifyByCalendar(data.mssv.toString(),undefined,undefined,undefined);               
+                          if(schedule === null){
+                            const kqFromDB = await ScheduleGetDB.getSchedule(data.mssv.toString(),undefined,undefined,undefined);
+                            if(Array.isArray(kqFromDB)){                        
+                              const result =  scheduleController.getBeforeYesterDaySchedule(kqFromDB);
+                              socket.emit("send-schedule",result);
+                                }else{
+                                  socket.emit("send-schedule",ERRORMESSAGE);
+                                } 
                           }else{
-                            socket.emit("send-schedule",ERRORMESSAGE);
-                          }      
+                            if(Array.isArray(schedule)){                        
+                              const result =  scheduleController.getBeforeYesterDaySchedule(schedule);
+                              socket.emit("send-schedule",result);
+                                }else{
+                                  socket.emit("send-schedule",ERRORMESSAGE);
+                                } 
+                          }
+                          await getWeekSchedule(data.mssv.toString(),undefined,undefined,undefined);               
                     }
                     break;
                   case "thứ trong tuần":
@@ -210,24 +317,26 @@ io.on("connection", socket => {
                    if(date !== "error"){
                     const scheduleNow = await scheduleController.getScheduleSpecifyByCalendar(data.mssv.toString(),undefined,undefined,undefined);
                     if(scheduleNow === null){
-                     const kqFromDB = await ScheduleGetDB.getSchedule(mssv,yearStudy,termID,weeks);
+                     const kqFromDB = await ScheduleGetDB.getSchedule(data.mssv.toString(),undefined,undefined,undefined);
                      if(Array.isArray(kqFromDB)){                        
                       const scheduleByDateNow = getTodaySchedule(kqFromDB,date);        
                       socket.emit("send-schedule",scheduleByDateNow);
                         }else{
                           socket.emit("send-schedule",ERRORMESSAGE);
                         }
+                    }else{
+                      if(Array.isArray(scheduleNow)){                        
+                        const scheduleByDateNow = getTodaySchedule(scheduleNow,date);        
+                        socket.emit("send-schedule",scheduleByDateNow);
+                          }else{
+                            socket.emit("send-schedule",ERRORMESSAGE);
+                          }  
                     }        
-                    if(Array.isArray(scheduleNow)){                        
-                      const scheduleByDateNow = getTodaySchedule(scheduleNow,date);        
-                      socket.emit("send-schedule",scheduleByDateNow);
-                        }else{
-                          socket.emit("send-schedule",ERRORMESSAGE);
-                        }                  
+                    await getWeekSchedule(data.mssv.toString(),undefined,undefined,undefined);   
                    }else{
                     socket.emit("send-schedule","Xin lỗi, tôi không hiểu ý bạn!");
                    }
-                   await getWeekSchedule(data.mssv.toString(),undefined,undefined,undefined);
+                 
                     break;      
                   case "thứ tuần sau":
                     sendWaiter();
@@ -235,15 +344,27 @@ io.on("connection", socket => {
                      if(dateNextWeek === "error"){
                       socket.emit("send-schedule","Xin lỗi, tôi không hiểu ý bạn!");
                      }else{
-                      const scheduleNextWeek = await getWeekSchedule(data.mssv.toString(),undefined,undefined,nextWeek.toString());
                       const nextWeek =  getWeek(new Date()) +1;
-                      if(Array.isArray(scheduleNextWeek)){                                 
-                        const scheduleByDateNextWeek = getTodaySchedule(scheduleNextWeek,dateNextWeek);        
-                        socket.emit("send-schedule",scheduleByDateNextWeek);       
-                          }else{
-                            socket.emit("send-schedule",ERRORMESSAGE);
-                          }                    
-                     } 
+                      const scheduleNextWeek = await scheduleController.getScheduleSpecifyByCalendar(data.mssv.toString(),undefined,undefined,nextWeek.toString());
+                      if(scheduleNextWeek === null){
+                        const kqFromDB = await ScheduleGetDB.getSchedule(data.mssv.toString(),undefined,undefined,nextWeek.toString());
+                        if(Array.isArray(kqFromDB)){                                 
+                          const scheduleByDateNextWeek = getTodaySchedule(kqFromDB,dateNextWeek);        
+                          socket.emit("send-schedule",scheduleByDateNextWeek);       
+                            }else{
+                              socket.emit("send-schedule",ERRORMESSAGE);
+                            } 
+                      }else{
+                        if(Array.isArray(scheduleNextWeek)){                                 
+                          const scheduleByDateNextWeek = getTodaySchedule(scheduleNextWeek,dateNextWeek);        
+                          socket.emit("send-schedule",scheduleByDateNextWeek);       
+                            }else{
+                              socket.emit("send-schedule",ERRORMESSAGE);
+                            }  
+                      }
+                      await getWeekSchedule(data.mssv.toString(),undefined,undefined,nextWeek.toString());         
+                     }
+                    
                       break;
                   case "thứ tuần trước":
                     sendWaiter();
@@ -252,13 +373,24 @@ io.on("connection", socket => {
                     socket.emit("send-schedule","Xin lỗi, tôi không hiểu ý bạn!");
                    }else{
                     const previousWeekByDate =  getWeek(new Date()) - 1;
-                    const schedulePreviousWeekByDate = await getWeekSchedule(data.mssv.toString(),undefined,undefined,previousWeekByDate.toString());
-                    if(Array.isArray(schedulePreviousWeekByDate)){                                 
-                      const scheduleByDatePreviousWeek = getTodaySchedule(schedulePreviousWeekByDate,datePreviousWeek);        
-                      socket.emit("send-schedule",scheduleByDatePreviousWeek);            
-                        }else{
-                          socket.emit("send-schedule",ERRORMESSAGE);
-                        }                          
+                    const schedulePreviousWeekByDate = await scheduleController.getScheduleSpecifyByCalendar(data.mssv.toString(),undefined,undefined,previousWeekByDate.toString());
+                    if(schedulePreviousWeekByDate === null){
+                      const kqFromDB = await ScheduleGetDB.getSchedule(data.mssv.toString(),undefined,undefined,previousWeekByDate.toString());
+                      if(Array.isArray(kqFromDB)){                                 
+                        const scheduleByDatePreviousWeek = getTodaySchedule(kqFromDB,datePreviousWeek);        
+                        socket.emit("send-schedule",scheduleByDatePreviousWeek);            
+                          }else{
+                            socket.emit("send-schedule",ERRORMESSAGE);
+                          }                          
+                    }else{
+                      if(Array.isArray(schedulePreviousWeekByDate)){                                 
+                        const scheduleByDatePreviousWeek = getTodaySchedule(schedulePreviousWeekByDate,datePreviousWeek);        
+                        socket.emit("send-schedule",scheduleByDatePreviousWeek);            
+                          }else{
+                            socket.emit("send-schedule",ERRORMESSAGE);
+                          }  
+                    }
+                    await getWeekSchedule(data.mssv.toString(),undefined,undefined,previousWeekByDate.toString());
                    } 
                      break;   
                   case "MSSV":
