@@ -92,7 +92,7 @@ io.on("connection", socket => {
                   sendWaiter();
                  const nextWeek = getWeek(new Date()) +1;
                 const schedulesNextWeek = await scheduleController.getScheduleSpecifyByCalendar(data.mssv.toString(),undefined,undefined,nextWeek);
-                 if(schedules === null){
+                 if(schedulesNextWeek === null){
                   const kqFromDB = await ScheduleGetDB.getSchedule(data.mssv.toString(),undefined,undefined,nextWeek);
                   socket.emit("send-schedule",kqFromDB);    
                  }else{
@@ -104,7 +104,7 @@ io.on("connection", socket => {
                   sendWaiter();
                   const previousWeek =  getWeek(new Date()) - 1;
                   const schedulesPreviousWeek = await scheduleController.getScheduleSpecifyByCalendar(data.mssv.toString(),undefined,undefined,previousWeek);
-                 if(schedules === null){
+                 if(schedulesPreviousWeek === null){
                   const kqFromDB = await ScheduleGetDB.getSchedule(data.mssv.toString(),undefined,undefined,previousWeek);
                   socket.emit("send-schedule",kqFromDB);    
                  }else{
