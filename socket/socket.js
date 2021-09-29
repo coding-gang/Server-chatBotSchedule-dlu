@@ -202,7 +202,7 @@ io.on("connection", socket => {
                     }   
                     else{
                       const schedule = await scheduleController.getScheduleSpecifyByCalendar(data.mssv.toString(),undefined,undefined,undefined);            
-                      if(schedulePreviousWeek === null){
+                      if(schedule === null){
                         const kqFromDB = await ScheduleGetDB.getSchedule(data.mssv.toString(),undefined,undefined,undefined);
                         if(Array.isArray(kqFromDB)){
                           const result =  scheduleController.getYesterDaySchedule(kqFromDB);
