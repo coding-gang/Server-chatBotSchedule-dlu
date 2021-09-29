@@ -9,13 +9,15 @@ const ERRORMESSAGE ="Xin lỗi bạn, có vấn đề về kết nối bạn hã
 
 
 const getScheduleByCalendar =async (data)=>{
-  if(data.hasOwnProperty("dataCalendar")){
+  if(data.hasOwnProperty('dataCalendar')){
     const termId =  getTermStudy(data.dataCalendar.month);
     const day = data.dataCalendar.dayName;
    const schedule =  await scheduleController.getScheduleSpecifyByCalendar(data.mssv.toString(),data.dataCalendar.year,termId,data.dataCalendar.week);
    const result =  getTodaySchedule(schedule,day);
-   return result;  
-    }
+   return result; 
+  }
+ 
+
  }
 
 const getWeekSchedule = async(mssv,yearStudy,termID,week) =>{
@@ -67,9 +69,9 @@ const getTermStudy = (month,yearStudy) => {
 //   }            
    
 //   });
-
-//  const SendMesCalendar={mssv:1812866,dataCalendar:{dayName:'Thứ 4',week:37,month:9,year:'2021-2022'}};
-//  getScheduleByCalendar(SendMesCalendar).then(kq => console.log(kq));
+//const SendMesCalendar = {mssv:1812866,"dayName": "Thứ 5", "month": 9, "week": 39, "year": "2021-2022"}
+  const SendMesCalendar={mssv:1812866,dataCalendar:{dayName:'Thứ 4',week:37,month:9,year:'2021-2022'}};
+ getScheduleByCalendar(SendMesCalendar).then(kq => console.log(kq));
    
 
 io.on("connection", socket => {
@@ -77,9 +79,11 @@ io.on("connection", socket => {
     console.log(`connect success ${socket.id}`);
 
     socket.on("scheduleWeek", async (data) => {
+      socket.emit("send-schedule",data);
        if(data.hasOwnProperty("dataCalendar")){
-        sendWaiter();
-        getScheduleByCalendar(data).then(result => socket.emit("send-schedule",result));
+        socket.emit("send-schedule","Bạn đợi tí from calendar...!");
+       // sendWaiter();
+ //       getScheduleByCalendar(data).then(result => socket.emit("send-schedule",result));
        }else{
         const kq =  await nlp.process('vi',data.message);
         console.log(kq);
