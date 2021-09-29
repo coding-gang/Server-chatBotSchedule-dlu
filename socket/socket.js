@@ -79,7 +79,7 @@ io.on("connection", socket => {
     console.log(`connect success ${socket.id}`);
 
     socket.on("scheduleWeek", async (data) => {
-      socket.emit("send-schedule",data);
+      
        if(data.hasOwnProperty("dataCalendar")){
         socket.emit("send-schedule","Bạn đợi tí from calendar...!");
        // sendWaiter();
