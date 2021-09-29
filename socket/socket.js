@@ -5,8 +5,7 @@ const bot = require('../botNlp/bot');
 let nlp;
 const scheduleController = require('../controller/scheduleController');
 const ERRORMESSAGE ="Xin lỗi bạn, có vấn đề về kết nối bạn hãy thử lại sau";
-(async () => { nlp = await bot.trainBot() })();
-
+(async () => { nlp = await bot.trainBot()})();
 
 const getScheduleByCalendar =async (data)=>{
   if(data.hasOwnProperty('dataCalendar')){
@@ -16,13 +15,11 @@ const getScheduleByCalendar =async (data)=>{
    const result =  getTodaySchedule(schedule,day);
    return result; 
   }
- 
-
  }
 
 const getWeekSchedule = async(mssv,yearStudy,termID,week) =>{
-  const result = await scheduleController.getSchedule(mssv,yearStudy,termID,week);
-  return result ;
+  await scheduleController.getSchedule(mssv,yearStudy,termID,week);
+  
  }
 
 const getTodaySchedule = (schedule,date) =>{
@@ -59,20 +56,10 @@ const getTermStudy = (month,yearStudy) => {
   }
   return termID;
 };
-
-// const nextWeek = getWeek(new Date());
-// getWeekSchedule("1812867",undefined,undefined,nextWeek.toString()).then(result =>{        
-//   if(Array.isArray(result)){
-//     console.log(result);
-//   }else{
-//     console.log(ERRORMESSAGE);
-//   }            
-   
-//   });
-//const SendMesCalendar = {mssv:1812866,"dayName": "Thứ 5", "month": 9, "week": 39, "year": "2021-2022"}
-//   const SendMesCalendar={mssv:1812866,dataCalendar:{dayName:'Thứ 4',week:37,month:9,year:'2021-2022'}};
-//  getScheduleByCalendar(SendMesCalendar).then(kq => console.log(kq));
-   
+setTimeout(()=>{
+  const SendMesCalendar={mssv:1777777,dataCalendar:{dayName:'Thứ 3',week:40,month:9,year:'2021-2022'}};
+  getScheduleByCalendar(SendMesCalendar).then(result =>console.log(result));
+},2000)
 
 io.on("connection", socket => {
     // either with send()
@@ -94,9 +81,9 @@ io.on("connection", socket => {
               
                 case "trong tuần": 
                 sendWaiter();
-                  getWeekSchedule(data.mssv.toString(),undefined,undefined,undefined).then(result =>{            
-                  socket.emit("send-schedule",result);           
-                });
+                const schedules = await scheduleController.getScheduleSpecifyByCalendar(data.mssv.toString(),undefined,undefined,undefined);
+                socket.emit("send-schedule",schedules);
+                getWeekSchedule(data.mssv.toString(),undefined,undefined,undefined);          
                     break;
                 case "tuần tới":
                   sendWaiter();

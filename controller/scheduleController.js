@@ -13,11 +13,10 @@ const {
   const month = date.getMonth();
 
 exports.getSchedule = async(mssv,yearStudy,termID,week) =>{
-        console.log(Date.now() + " Ping Received");
-
+      
         if (mssv) {
-     const kq =  await getSchedulefunc(mssv, yearStudy, termID,week);
-     return kq;
+    await getSchedulefunc(mssv, yearStudy, termID,week);
+    
         } 
        return  {
             message: 'Bạn phải cung cấp mssv!'
@@ -36,7 +35,7 @@ exports.getScheduleSpecifyByCalendar = async(mssv,yearStudy,termID,weeks) =>{
             }  
           
           }
-  
+ 
 const SaveScheduleFromDB  = async (data , studentId , params)=>{
   await Schedule.find({studentId: studentId} , async(err, result)=>{
     if(result.length === 0 || result.length <3 ){    
@@ -87,9 +86,9 @@ const UpdateAndRemoveSchedule = async (studentId,result , weekCurrent) =>{
       };
      }
    }
-  // default current week;
- const res = await performSyncScheduleFunctions(studentId,result[0].yearStudy,result[0].termID, weekCurrent);
-  return res;
+//   // default current week;
+//  const res = await performSyncScheduleFunctions(studentId,result[0].yearStudy,result[0].termID, weekCurrent);
+//   return res;
 }
 
 const getSchedulefunc = async (studentId , yearStudys ,termIDs, weeks) =>{
@@ -116,18 +115,20 @@ const getSchedulefunc = async (studentId , yearStudys ,termIDs, weeks) =>{
 
         const result = await Schedule.find({studentId: studentId});      
         const schedule = await performSyncScheduleFunctions(studentId, timeCurrent.yearStudy, timeCurrent.termId, weekCurrent);
-       
-  if(schedule === null && result.length === 3){
-      const kq = await getScheduleFromDB(studentId,weekCurrent);
-      return kq;
-  }
+      
+  // if(schedule === null && result.length === 3){
+  //   await getScheduleFromDB(studentId,weekCurrent);
+  //     // const kq = await getScheduleFromDB(studentId,weekCurrent);
+  //     // return kq;
+  // }
   
   if(schedule !== null){
 
     if(result.length === 3){     
         result.sort( (a, b) => a.week - b.week );
-      const kq =  await UpdateAndRemoveSchedule(studentId,result,weekCurrent);   
-        return kq;
+        await UpdateAndRemoveSchedule(studentId,result,weekCurrent);   
+      // const kq =  await UpdateAndRemoveSchedule(studentId,result,weekCurrent);   
+      //   return kq;
     }else{
     
       await SaveScheduleFromDB(schedule,studentId, timeCurrent);
@@ -154,7 +155,7 @@ const getSchedulefunc = async (studentId , yearStudys ,termIDs, weeks) =>{
     .then( async data => {
      await SaveScheduleFromDB(data,studentId, timeLast);
     });   
-    return schedule;
+   // return schedule;
     }     
     }else{
           return "Xin lỗi bạn, có vấn đề về kết nối bạn hãy thử lại sau";
