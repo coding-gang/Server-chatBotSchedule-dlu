@@ -75,8 +75,9 @@ const getTermStudy = (month,yearStudy) => {
 io.on("connection", socket => {
     // either with send()
     console.log(`connect success ${socket.id}`);
-    socket.on("scheduleWeek", async (data) => {
 
+    socket.on("scheduleWeek", async (data) => {
+    sendWaiter();
        if(data.hasOwnProperty("dataCalendar")){
         sendWaiter();
         getScheduleByCalendar(data).then(result => socket.emit("send-schedule",result));
