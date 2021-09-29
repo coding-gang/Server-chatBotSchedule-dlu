@@ -208,8 +208,7 @@ io.on("connection", socket => {
                     sendWaiter();
                     const date = scheduleController.getScheduleByDate(kq.utterance);
                    if(date !== "error"){
-                    const scheduleNow = await scheduleController.getScheduleSpecifyByCalendar(data.mssv.toString(),undefined,undefined,undefined);
-                     await getWeekSchedule(data.mssv.toString(),undefined,undefined,undefined);
+                    const scheduleNow = await scheduleController.getScheduleSpecifyByCalendar(data.mssv.toString(),undefined,undefined,undefined);        
                     if(Array.isArray(scheduleNow)){                        
                       const scheduleByDateNow = getTodaySchedule(scheduleNow,date);        
                       socket.emit("send-schedule",scheduleByDateNow);
@@ -219,6 +218,7 @@ io.on("connection", socket => {
                    }else{
                     socket.emit("send-schedule","Xin lỗi, tôi không hiểu ý bạn!");
                    }
+                   await getWeekSchedule(data.mssv.toString(),undefined,undefined,undefined);
                     break;      
                   case "thứ tuần sau":
                     sendWaiter();
