@@ -1,6 +1,5 @@
 const Schedule = require("../models/scheduleModel");
 const {
-    handleDataScheduleToJSON,
     performSyncScheduleFunctions
 
   } = require("../moduleApiDlu/index");
@@ -26,6 +25,18 @@ exports.getSchedule = async(mssv,yearStudy,termID,week) =>{
         
         }
 
+exports.getScheduleSpecifyByCalendar = async(mssv,yearStudy,termID,weeks) =>{
+                     
+          if (mssv) {
+       const kq =  await performSyncScheduleFunctions(mssv, yearStudy, termID, weeks);
+       return kq;
+          } 
+         return  {
+              message: 'Bạn phải cung cấp mssv!'
+            }  
+          
+          }
+  
 const SaveScheduleFromDB  = async (data , studentId , params)=>{
   await Schedule.find({studentId: studentId} , async(err, result)=>{
     if(result.length === 0 || result.length <3 ){    
