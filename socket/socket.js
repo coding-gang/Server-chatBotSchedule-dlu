@@ -17,7 +17,7 @@ const getScheduleByCalendar =async (data)=>{
    return result;  
     }
  }
- 
+
 const getWeekSchedule = async(mssv,yearStudy,termID,week) =>{
   const result = await scheduleController.getSchedule(mssv,yearStudy,termID,week);
   return result ;
@@ -76,8 +76,10 @@ io.on("connection", socket => {
     // either with send()
     console.log(`connect success ${socket.id}`);
     socket.on("scheduleWeek", async (data) => {
+
        if(data.hasOwnProperty("dataCalendar")){
-        getScheduleByCalendar(SendMesCalendar).then(result => socket.emit("send-schedule",result));
+        sendWaiter();
+        getScheduleByCalendar(data).then(result => socket.emit("send-schedule",result));
        }else{
         const kq =  await nlp.process('vi',data.message);
         console.log(kq);
