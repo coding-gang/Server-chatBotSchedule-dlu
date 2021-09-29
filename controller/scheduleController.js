@@ -1,4 +1,5 @@
 const Schedule = require("../models/scheduleModel");
+
 const {
     performSyncScheduleFunctions
 
@@ -16,23 +17,20 @@ exports.getSchedule = async(mssv,yearStudy,termID,week) =>{
       
         if (mssv) {
     await getSchedulefunc(mssv, yearStudy, termID,week);
-    
-        } 
-       return  {
-            message: 'Bạn phải cung cấp mssv!'
-          }  
-        
+        }
+
         }
 
 exports.getScheduleSpecifyByCalendar = async(mssv,yearStudy,termID,weeks) =>{
                      
           if (mssv) {
        const kq =  await performSyncScheduleFunctions(mssv, yearStudy, termID, weeks);
+       if(kq === null){
+            const kqFromDB = await ScheduleGetDB.getSchedule(mssv,yearStudy,termID,weeks);
+            return kqFromDB;
+       }
        return kq;
-          } 
-         return  {
-              message: 'Bạn phải cung cấp mssv!'
-            }  
+          }  
           
           }
  
@@ -67,28 +65,14 @@ const UpdateAndRemoveSchedule = async (studentId,result , weekCurrent) =>{
                      };      
                     await createSchedule(data,studentId,time);                
              }
-             else{
-             return  {
-              message: 'Error'
-            };
-
-             } 
   }
         
  else if(weekUpdate > weeks[2] || weekUpdate === week){
   const result  = await Schedule.deleteMany({studentId:studentId});
      if(result){
-  await getSchedulefunc(studentId,result.yearStudy,result.termID,weekUpdate);
-      
-     }else{
-      return  {
-        message: 'Error'
-      };
+  await getSchedulefunc(studentId,result.yearStudy,result.termID,weekUpdate);    
      }
    }
-//   // default current week;
-//  const res = await performSyncScheduleFunctions(studentId,result[0].yearStudy,result[0].termID, weekCurrent);
-//   return res;
 }
 
 const getSchedulefunc = async (studentId , yearStudys ,termIDs, weeks) =>{
@@ -127,8 +111,6 @@ const getSchedulefunc = async (studentId , yearStudys ,termIDs, weeks) =>{
     if(result.length === 3){     
         result.sort( (a, b) => a.week - b.week );
         await UpdateAndRemoveSchedule(studentId,result,weekCurrent);   
-      // const kq =  await UpdateAndRemoveSchedule(studentId,result,weekCurrent);   
-      //   return kq;
     }else{
     
       await SaveScheduleFromDB(schedule,studentId, timeCurrent);
@@ -157,9 +139,7 @@ const getSchedulefunc = async (studentId , yearStudys ,termIDs, weeks) =>{
     });   
    // return schedule;
     }     
-    }else{
-          return "Xin lỗi bạn, có vấn đề về kết nối bạn hãy thử lại sau";
-        }
+    }
 }
 
 const createSchedule = async (data , studentId ,params) =>{
