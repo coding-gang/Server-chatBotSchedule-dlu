@@ -43,7 +43,7 @@ const isScheduleFromDB = async (mssv,yearStudy,termID,weeks) =>{
         const kqFromDB = await ScheduleGetDB.getSchedule(mssv,yearStudy,termID,weeks);
         return kqFromDB;
        }
-       await getWeekSchedule(data.mssv.toString(),undefined,undefined,undefined);     
+       await getWeekSchedule(mssv,undefined,undefined,undefined);     
      return schedules
  
 }
@@ -66,9 +66,11 @@ const getTermStudy = (month,yearStudy) => {
   }
   return termID;
 };
-setTimeout(()=>{
-  const SendMesCalendar={mssv:1777777,dataCalendar:{dayName:'Thứ 3',week:40,month:9,year:'2021-2022'}};
-  getScheduleByCalendar(SendMesCalendar).then(result =>console.log(result));
+setTimeout(async ()=>{
+  // const SendMesCalendar={mssv:1777777,dataCalendar:{dayName:'Thứ 3',week:40,month:9,year:'2021-2022'}};
+  // getScheduleByCalendar(SendMesCalendar).then(result =>console.log(result));
+  const scheduleNow = await isScheduleFromDB('1812866',undefined,undefined,undefined);
+  console.log(scheduleNow);
 },2000)
 
 io.on("connection", socket => {
@@ -217,7 +219,7 @@ io.on("connection", socket => {
                     sendWaiter();
                     const date = scheduleController.getScheduleByDate(kq.utterance);
                    if(date !== "error"){
-                    const scheduleNow = await  isScheduleFromDB(data.mssv.toString(),undefined,undefined,undefined);
+                    const scheduleNow = await isScheduleFromDB(data.mssv.toString(),undefined,undefined,undefined);
                     if(Array.isArray(scheduleNow)){                        
                       const scheduleByDateNow = getTodaySchedule(scheduleNow,date);        
                       socket.emit("send-schedule",scheduleByDateNow);
