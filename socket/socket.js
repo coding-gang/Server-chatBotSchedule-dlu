@@ -77,19 +77,19 @@ const getTermStudy = (month,yearStudy) => {
 io.on("connection", socket => {
     // either with send()
     console.log(`connect success ${socket.id}`);
-
+    const sendWaiter =()=>{
+      socket.emit("send-schedule","Bạn đợi tí...!");
+    }
     socket.on("scheduleWeek", async (data) => {
       
        if(data.hasOwnProperty("dataCalendar")){
-           sendWaiter();
+      sendWaiter();
       getScheduleByCalendar(data).then(result => socket.emit("send-schedule",result));
        }else{
         const kq =  await nlp.process('vi',data.message);
         console.log(kq);
   
-        const sendWaiter =()=>{
-          socket.emit("send-schedule","Bạn đợi tí...!");
-        }
+    
         switch(kq.answer){
               
                 case "trong tuần": 
