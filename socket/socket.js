@@ -208,7 +208,8 @@ io.on("connection", socket => {
                     sendWaiter();
                     const date = scheduleController.getScheduleByDate(kq.utterance);
                    if(date !== "error"){
-                    const scheduleNow = await getWeekSchedule(data.mssv.toString(),undefined,undefined,undefined);
+                    const scheduleNow = await scheduleController.getScheduleSpecifyByCalendar(data.mssv.toString(),undefined,undefined,undefined);
+                     await getWeekSchedule(data.mssv.toString(),undefined,undefined,undefined);
                     if(Array.isArray(scheduleNow)){                        
                       const scheduleByDateNow = getTodaySchedule(scheduleNow,date);        
                       socket.emit("send-schedule",scheduleByDateNow);
