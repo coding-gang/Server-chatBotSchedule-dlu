@@ -25,10 +25,6 @@ exports.getScheduleSpecifyByCalendar = async(mssv,yearStudy,termID,weeks) =>{
                      
           if (mssv) {
        const kq =  await performSyncScheduleFunctions(mssv, yearStudy, termID, weeks);
-       if(kq === null){
-            const kqFromDB = await ScheduleGetDB.getSchedule(mssv,yearStudy,termID,weeks);
-            return kqFromDB;
-       }
        return kq;
           }  
           

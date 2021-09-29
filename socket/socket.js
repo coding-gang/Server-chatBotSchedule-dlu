@@ -4,7 +4,8 @@ const io = require('socket.io')(server);
 const bot = require('../botNlp/bot');
 let nlp;
 const scheduleController = require('../controller/scheduleController');
-const ScheduleGetDB = require("../controller/scheduleFromDBController");
+const ScheduleFromDB = require("../controller/scheduleFromDBController");
+
 const ERRORMESSAGE ="Xin lỗi bạn, có vấn đề về kết nối bạn hãy thử lại sau";
 (async () => { nlp = await bot.trainBot()})();
 
@@ -37,17 +38,6 @@ const getWeek = d => {
    return week;
 }
 
-const isScheduleFromDB = async (mssv,yearStudy,termID,weeks) =>{
-  const schedules = await scheduleController.getScheduleSpecifyByCalendar(mssv,yearStudy,termID,weeks);
-       if(schedules === null){
-        const kqFromDB = await ScheduleGetDB.getSchedule(mssv,yearStudy,termID,weeks);
-        return kqFromDB;
-       }
-       await getWeekSchedule(mssv,undefined,undefined,undefined);     
-     return schedules
- 
-}
-
 const getTermStudy = (month,yearStudy) => {
   var termID ="";
   if (
@@ -66,12 +56,7 @@ const getTermStudy = (month,yearStudy) => {
   }
   return termID;
 };
-setTimeout(async ()=>{
-  // const SendMesCalendar={mssv:1777777,dataCalendar:{dayName:'Thứ 3',week:40,month:9,year:'2021-2022'}};
-  // getScheduleByCalendar(SendMesCalendar).then(result =>console.log(result));
-  const scheduleNow = await isScheduleFromDB('1812866',undefined,undefined,undefined);
-  console.log(scheduleNow);
-},2000)
+
 
 io.on("connection", socket => {
     // either with send()
@@ -92,10 +77,14 @@ io.on("connection", socket => {
         switch(kq.answer){
               
                 case "trong tuần": 
-                sendWaiter();
-               const schedules = await  isScheduleFromDB(data.mssv.toString(),undefined,undefined,undefined);
-                socket.emit("send-schedule",schedules);
-                    break;
+                sendWaiter();           
+                 const schedules = await scheduleController.getScheduleSpecifyByCalendar(data.mssv.toString(),undefined,undefined,undefined);
+                 if(schedules === null){
+                  const kqFromDB = await ScheduleGetDB.getSchedule(mssv,yearStudy,termID,weeks);
+                  socket.emit("send-schedule",kqFromDB);    
+                 }
+               socket.emit("send-schedule",schedules);   
+                 break;
                 case "tuần tới":
                   sendWaiter();
                  const nextWeek = getWeek(new Date()) +1;
@@ -219,7 +208,16 @@ io.on("connection", socket => {
                     sendWaiter();
                     const date = scheduleController.getScheduleByDate(kq.utterance);
                    if(date !== "error"){
-                    const scheduleNow = await isScheduleFromDB(data.mssv.toString(),undefined,undefined,undefined);
+                    const scheduleNow = await scheduleController.getScheduleSpecifyByCalendar(data.mssv.toString(),undefined,undefined,undefined);
+                    if(scheduleNow === null){
+                     const kqFromDB = await ScheduleGetDB.getSchedule(mssv,yearStudy,termID,weeks);
+                     if(Array.isArray(kqFromDB)){                        
+                      const scheduleByDateNow = getTodaySchedule(kqFromDB,date);        
+                      socket.emit("send-schedule",scheduleByDateNow);
+                        }else{
+                          socket.emit("send-schedule",ERRORMESSAGE);
+                        }
+                    }        
                     if(Array.isArray(scheduleNow)){                        
                       const scheduleByDateNow = getTodaySchedule(scheduleNow,date);        
                       socket.emit("send-schedule",scheduleByDateNow);
