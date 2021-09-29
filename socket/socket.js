@@ -70,8 +70,8 @@ const getTermStudy = (month,yearStudy) => {
    
 //   });
 //const SendMesCalendar = {mssv:1812866,"dayName": "Thứ 5", "month": 9, "week": 39, "year": "2021-2022"}
-  const SendMesCalendar={mssv:1812866,dataCalendar:{dayName:'Thứ 4',week:37,month:9,year:'2021-2022'}};
- getScheduleByCalendar(SendMesCalendar).then(kq => console.log(kq));
+//   const SendMesCalendar={mssv:1812866,dataCalendar:{dayName:'Thứ 4',week:37,month:9,year:'2021-2022'}};
+//  getScheduleByCalendar(SendMesCalendar).then(kq => console.log(kq));
    
 
 io.on("connection", socket => {
@@ -81,9 +81,8 @@ io.on("connection", socket => {
     socket.on("scheduleWeek", async (data) => {
       
        if(data.hasOwnProperty("dataCalendar")){
-        socket.emit("send-schedule","Bạn đợi tí from calendar...!");
-       // sendWaiter();
- //       getScheduleByCalendar(data).then(result => socket.emit("send-schedule",result));
+           sendWaiter();
+      getScheduleByCalendar(data).then(result => socket.emit("send-schedule",result));
        }else{
         const kq =  await nlp.process('vi',data.message);
         console.log(kq);
