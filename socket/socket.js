@@ -9,24 +9,15 @@ const ScheduleFromDB = require("../controller/scheduleFromDBController");
 const ERRORMESSAGE ="Xin lỗi bạn, có vấn đề về kết nối bạn hãy thử lại sau";
 (async () => { nlp = await bot.trainBot()})();
 
-const getScheduleByCalendar =async (data)=>{
-  if(data.hasOwnProperty('dataCalendar')){
-    const termId =  getTermStudy(data.dataCalendar.month);
-    const day = data.dataCalendar.dayName;
-   const schedule =  await scheduleController.getScheduleSpecifyByCalendar(data.mssv.toString(),data.dataCalendar.year,termId,data.dataCalendar.week);
-   const result =  getTodaySchedule(schedule,day);
-   return result; 
-  }
- }
+const getTodaySchedule = (schedule,date) =>{
+  const result =  scheduleController.getTodaySchedule(schedule,date);
+  return result;
+}
 
 const getWeekSchedule = async(mssv,yearStudy,termID,week) =>{
   await scheduleController.getSchedule(mssv,yearStudy,termID,week);
  }
 
-const getTodaySchedule = (schedule,date) =>{
-    const result =  scheduleController.getTodaySchedule(schedule,date);
-    return result;
-}
   
 const getWeek = d => {
   d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
@@ -58,8 +49,34 @@ const getTermStudy = (month,yearStudy) => {
 };
 
 
+const getScheduleByCalendar =async (schedule,mssv)=>{
+   
+  if(schedule.hasOwnProperty('data')){
+      const termId =  getTermStudy(schedule.data.month);
+      const day = schedule.data.dayName;
+      const schedule =  await scheduleController.getScheduleSpecifyByCalendar(mssv,schedule.data.year,termId,schedule.data.week);
+      const result =  getTodaySchedule(schedule,day);
+      return result; 
+  }
+  }
+ 
+  // const data = {
+  //   "dataCalendar":[
+  //     {"data":{"dayName":"Thứ 4","month":12,"week":50,"year":"2021-2022"},
+  //      "text":"T.12 8, 2021"
+  //     },
+  //     {"data":{"dayName":"Thứ 5","month":12,"week":50,"year":"2021-2022"},
+  //      "text":"T.13 8, 2021"
+  //     }
+  //    ],
+  //    "mssv":"1812866"
+  // }
+
+
+
 io.on("connection", socket => {
     // either with send()
+     console.log("ok")
     console.log(`connect success ${socket.id}`);
     const sendWaiter =()=>{
       socket.emit("send-schedule","Bạn đợi tí...!");
@@ -67,8 +84,13 @@ io.on("connection", socket => {
     socket.on("scheduleWeek", async (data) => {
       
        if(data.hasOwnProperty("dataCalendar")){
-      sendWaiter();
-      getScheduleByCalendar(data).then(result => socket.emit("send-schedule",result));
+            sendWaiter();
+            const scheduleCalendars = data.dataCalendar;
+            const mssv = data.mssv.toString();
+            scheduleCalendars.forEach(item=>{
+              getScheduleByCalendar(item,mssv).then(result =>  socket.emit("send-schedule",result));
+            })
+      
        }else{
         const kq =  await nlp.process('vi',data.message);
         console.log(kq);
