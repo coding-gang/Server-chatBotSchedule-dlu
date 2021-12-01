@@ -50,14 +50,12 @@ const getTermStudy = (month,yearStudy) => {
 
 
 const getScheduleByCalendar =async (schedule,mssv)=>{
-   
-  if(schedule.hasOwnProperty('data')){
       const termId =  getTermStudy(schedule.data.month);
       const day = schedule.data.dayName;
-      const schedule =  await scheduleController.getScheduleSpecifyByCalendar(mssv,schedule.data.year,termId,schedule.data.week);
-      const result =  getTodaySchedule(schedule,day);
+      const schedules =  await scheduleController.getScheduleSpecifyByCalendar(mssv,schedule.data.year,termId,schedule.data.week);
+      const result =  getTodaySchedule(schedules,day);
       return result; 
-  }
+
   }
  
   // const data = {
@@ -72,26 +70,44 @@ const getScheduleByCalendar =async (schedule,mssv)=>{
   //    "mssv":"1812866"
   // }
 
+// const testFunc =async(data)=>{
+//  // const resultToBot =[];
+//   if(data.hasOwnProperty("dataCalendar")){
+//    // sendWaiter();
+//     const scheduleCalendars = data.dataCalendar;
+//     const mssv = data.mssv.toString();
+//    const resultToBot =  await Promise.all(scheduleCalendars.map( async (item)=>{
+//       const schedule = await getScheduleByCalendar(item,mssv);
+//      schedule.splice(0,1);
+//       return schedule[0]
+//     }))
+//     console.log( resultToBot);
+// }
+// }
 
+//  setTimeout(async() => {
+//   await testFunc(data);
+//  }, 2000);
 
 io.on("connection", socket => {
     // either with send()
-     console.log("ok")
     console.log(`connect success ${socket.id}`);
     const sendWaiter =()=>{
       socket.emit("send-schedule","Bạn đợi tí...!");
     }
     socket.on("scheduleWeek", async (data) => {
       
-       if(data.hasOwnProperty("dataCalendar")){
-            sendWaiter();
-            const scheduleCalendars = data.dataCalendar;
-            const mssv = data.mssv.toString();
-            scheduleCalendars.forEach(item=>{
-              getScheduleByCalendar(item,mssv).then(result =>  socket.emit("send-schedule",result));
-            })
-      
-       }else{
+      if(data.hasOwnProperty("dataCalendar")){
+         sendWaiter();
+         const scheduleCalendars = data.dataCalendar;
+         const mssv = data.mssv.toString();
+        const resultToBot =  await Promise.all(scheduleCalendars.map( async (item)=>{
+           const schedule = await getScheduleByCalendar(item,mssv);
+          schedule.splice(0,1);
+           return schedule[0]
+         }))
+         socket.emit("send-schedule",resultToBot);
+     }else{
         const kq =  await nlp.process('vi',data.message);
         console.log(kq);
   
@@ -439,4 +455,6 @@ io.on("connection", socket => {
      
   });
   });
+
+
 module.exports = server;

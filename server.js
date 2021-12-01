@@ -22,10 +22,10 @@ db.on('error', err => {
     process.exit(1);
   
   });
-
+ 
 server.listen( port, () => {
-
   console.log(`Server running at http://localhost:${port}`);
+  
 });
 
 
