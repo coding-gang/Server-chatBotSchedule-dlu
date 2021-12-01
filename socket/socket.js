@@ -58,32 +58,34 @@ const getScheduleByCalendar =async (schedule,mssv)=>{
 
   }
  
-  // const data = {
-  //   "dataCalendar":[
-  //     {"data":{"dayName":"Thứ 4","month":12,"week":50,"year":"2021-2022"},
-  //      "text":"T.12 8, 2021"
-  //     },
-  //     {"data":{"dayName":"Thứ 5","month":12,"week":50,"year":"2021-2022"},
-  //      "text":"T.13 8, 2021"
-  //     }
-  //    ],
-  //    "mssv":"1812866"
-  // }
+  const data = {
+    "dataCalendar":[
+      {"data":{"dayName":"Thứ 4","month":12,"week":50,"year":"2021-2022"},
+       "text":"T.12 8, 2021"
+      },
+      {"data":{"dayName":"Thứ 5","month":12,"week":50,"year":"2021-2022"},
+       "text":"T.13 8, 2021"
+      }
+     ],
+     "mssv":"1812866"
+  }
 
-// const testFunc =async(data)=>{
-//  // const resultToBot =[];
-//   if(data.hasOwnProperty("dataCalendar")){
-//    // sendWaiter();
-//     const scheduleCalendars = data.dataCalendar;
-//     const mssv = data.mssv.toString();
-//    const resultToBot =  await Promise.all(scheduleCalendars.map( async (item)=>{
-//       const schedule = await getScheduleByCalendar(item,mssv);
-//      schedule.splice(0,1);
-//       return schedule[0]
-//     }))
-//     console.log( resultToBot);
-// }
-// }
+const testFunc =async(data)=>{
+    let firstItem ={};
+  if(data.hasOwnProperty("dataCalendar")){
+   // sendWaiter();
+    const scheduleCalendars = data.dataCalendar;
+    const mssv = data.mssv.toString();
+   const resultToBot =  await Promise.all(scheduleCalendars.map( async (item)=>{
+      const schedule = await getScheduleByCalendar(item,mssv);
+     firstItem =  schedule.splice(0,1)[0];
+   
+      return schedule[0]
+    }))
+    resultToBot.unshift(firstItem)
+    console.log( resultToBot);
+}
+}
 
 //  setTimeout(async() => {
 //   await testFunc(data);
@@ -99,13 +101,15 @@ io.on("connection", socket => {
       
       if(data.hasOwnProperty("dataCalendar")){
          sendWaiter();
+         let firstItem ={};
          const scheduleCalendars = data.dataCalendar;
          const mssv = data.mssv.toString();
         const resultToBot =  await Promise.all(scheduleCalendars.map( async (item)=>{
            const schedule = await getScheduleByCalendar(item,mssv);
-          schedule.splice(0,1);
+           firstItem = schedule.splice(0,1)[0];
            return schedule[0]
          }))
+         resultToBot.unshift(firstItem)
          socket.emit("send-schedule",resultToBot);
      }else{
         const kq =  await nlp.process('vi',data.message);
