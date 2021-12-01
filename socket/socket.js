@@ -50,6 +50,7 @@ const getTermStudy = (month,yearStudy) => {
 
 
 const getScheduleByCalendar =async (schedule,mssv)=>{
+    
       const termId =  getTermStudy(schedule.data.month);
       const day = schedule.data.dayName;
       const schedules =  await scheduleController.getScheduleSpecifyByCalendar(mssv,schedule.data.year,termId,schedule.data.week);
@@ -79,17 +80,19 @@ const testFunc =async(data)=>{
    const resultToBot =  await Promise.all(scheduleCalendars.map( async (item)=>{
       const schedule = await getScheduleByCalendar(item,mssv);
      firstItem =  schedule.splice(0,1)[0];
-   
+     schedule[0].Sáng  !=='' ? schedule[0].Sáng  = schedule[0].Sáng.concat(' (',item.text,')') :'' ;
+     schedule[0].Chiều !=='' ? schedule[0].Chiều = schedule[0].Chiều.concat(' (',item.text,')'):'';
+     schedule[0].Tối   !=='' ? schedule[0].Tối =  schedule[0].Tối.concat(' (',item.text,')')   :'';
       return schedule[0]
     }))
     resultToBot.unshift(firstItem)
-    console.log( resultToBot);
+   console.log( resultToBot);
 }
 }
 
-//  setTimeout(async() => {
-//   await testFunc(data);
-//  }, 2000);
+ setTimeout(async() => {
+  await testFunc(data);
+ }, 2000);
 
 io.on("connection", socket => {
     // either with send()
@@ -101,14 +104,16 @@ io.on("connection", socket => {
       
       if(data.hasOwnProperty("dataCalendar")){
          sendWaiter();
-         let firstItem ={};
          const scheduleCalendars = data.dataCalendar;
          const mssv = data.mssv.toString();
-        const resultToBot =  await Promise.all(scheduleCalendars.map( async (item)=>{
-           const schedule = await getScheduleByCalendar(item,mssv);
-           firstItem = schedule.splice(0,1)[0];
-           return schedule[0]
-         }))
+         const resultToBot =  await Promise.all(scheduleCalendars.map( async (item)=>{
+         const schedule = await getScheduleByCalendar(item,mssv);
+     firstItem =  schedule.splice(0,1)[0];
+     schedule[0].Sáng  !=='' ? schedule[0].Sáng  = schedule[0].Sáng.concat(' (',item.text,')') :'' ;
+     schedule[0].Chiều !=='' ? schedule[0].Chiều = schedule[0].Chiều.concat(' (',item.text,')'):'';
+     schedule[0].Tối   !=='' ? schedule[0].Tối =  schedule[0].Tối.concat(' (',item.text,')')   :'';
+      return schedule[0]
+    }))
          resultToBot.unshift(firstItem)
          socket.emit("send-schedule",resultToBot);
      }else{
