@@ -6,7 +6,7 @@ let nlp;
 const scheduleController = require('../controller/scheduleController');
 const ScheduleGetDB = require("../controller/scheduleFromDBController");
 const ScheduleFromMonth = require('../controller/scheduleBotByMonth');
-const getSubject = require('../controller/ScheduleBotBySubject');
+const ScheduleBySubject = require('../controller/ScheduleBotBySubject');
 const ERRORMESSAGE ="Xin lỗi bạn, có vấn đề về kết nối bạn hãy thử lại sau";
 (async () => { nlp = await bot.trainBot()})();
 
@@ -463,10 +463,10 @@ io.on("connection", socket => {
                     const schedulesSubjectCurrent = await scheduleController.getScheduleSpecifyByCalendar(data.mssv.toString(),undefined,undefined,undefined);
                     if(schedulesSubjectCurrent === null){
                      const kqFromDBSubCurrent = await ScheduleGetDB.getSchedule(data.mssv.toString(),undefined,undefined,undefined);
-                     const kqSubjectDB = getSubject(kq.utterance,kqFromDBSubCurrent);
+                     const kqSubjectDB = await ScheduleBySubject.getSubject(kq.utterance,kqFromDBSubCurrent);
                      socket.emit("send-schedule",kqSubjectDB);    
                     }else{
-                      const kqSubject = getSubject(kq.utterance,schedulesSubjectCurrent);
+                      const kqSubject = await ScheduleBySubject.getSubject(kq.utterance,kqFromDBSubCurrent);
                      socket.emit("send-schedule",kqSubject);   
                     }
                     await getWeekSchedule(data.mssv.toString(),undefined,undefined,undefined);
