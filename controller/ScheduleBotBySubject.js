@@ -12,8 +12,9 @@ const removeEmptyStrings = (obj) => {
   }
   
   
-  exports.getSubject =async (text,kqFromDB) =>{
-    const result =[]
+  exports.getSubject =(text,kqFromDB) =>{
+    const firstItem =  kqFromDB.splice(0,1)[0];
+   const result =[];
     let subject ='';
     const textSubject = text.toLowerCase().trim();
     const strSplit =  textSubject.split(' ');
@@ -24,29 +25,29 @@ const removeEmptyStrings = (obj) => {
     const strSlice = strSplit.slice(indexSearch);
        [strSubject,...rest] = [...strSlice];
        subject = rest.join(' ');
-        [strEmpty,...scheRest] = [...kqFromDB];
-         
+        [strEmpty,...scheRest] = [...kqFromDB];  
     const filterSubjectNotEmpty = scheRest.map(item =>{
          const newItem = removeEmptyStrings(item);
             return newItem
       })
-  
-     
       filterSubjectNotEmpty.forEach((el) =>{
+       
        Object.keys(el).forEach((prop,index) => {
          const isCan = canSplit(el[prop],'-')
           if(isCan){
-               if(el[prop].split('-')[1].search(subject) !==-1){
+               if(el[prop].split('-')[1].toLowerCase().search(subject) !==-1){
                 result.push(el)
                }else{
                 delete el[prop]
                }
           }
         } );
+        
       })
-
+      result.unshift(firstItem)
+      return result;
   }
-  return result;
+ 
   }
 
 

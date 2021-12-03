@@ -61,21 +61,14 @@ const getScheduleByCalendar =async (schedule,mssv)=>{
   }
  
 //  setTimeout(async () => {
-//   const year = new Date().getFullYear();
-//   const month = new Date().getMonth();
-//   console.log(month)
-//    const kqs = ScheduleFromMonth.getNumberMonth("thời khóa biểu tháng mười ba");
-//       if(kqs.month === 13) console.log(kqs.month)
-//       else{
-//         const result = await ScheduleFromMonth.getScheduleByMonth("1812866",kqs.month-1,kqs.year);
-//         console.log(result);
-//       }
-//   },2000);
+//   const schedulesSubjectCurrent = await scheduleController.getScheduleSpecifyByCalendar("1812866",undefined,undefined,undefined);
+//   console.log(schedulesSubjectCurrent)
+//   const kqSubject =  ScheduleBySubject.getSubject("thời khóa biểu tuần này môn thiết kế mẫu",schedulesSubjectCurrent);
+//   console.log(kqSubject)
+
+// },2000);
 
 
-setTimeout(async() => {
- await getSubject("Thời khóa biểu tuần sau của môn thiết kế mẫu");
-}, 2000);
 
 
 io.on("connection", socket => {
@@ -462,8 +455,8 @@ io.on("connection", socket => {
                     sendWaiter();
                     const schedulesSubjectCurrent = await scheduleController.getScheduleSpecifyByCalendar(data.mssv.toString(),undefined,undefined,undefined);
                     if(schedulesSubjectCurrent === null){
-                     const kqFromDBSubCurrent = await ScheduleGetDB.getSchedule(data.mssv.toString(),undefined,undefined,undefined);
-                     const kqSubjectDB = await ScheduleBySubject.getSubject(kq.utterance,kqFromDBSubCurrent);
+                     const kqFromDBSubCurrent =  ScheduleGetDB.getSchedule(data.mssv.toString(),undefined,undefined,undefined);
+                     const kqSubjectDB =  ScheduleBySubject.getSubject(kq.utterance,kqFromDBSubCurrent);
                      socket.emit("send-schedule",kqSubjectDB);    
                     }else{
                       const kqSubject = await ScheduleBySubject.getSubject(kq.utterance,schedulesSubjectCurrent);
