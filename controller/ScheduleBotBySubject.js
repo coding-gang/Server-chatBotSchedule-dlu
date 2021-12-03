@@ -26,11 +26,11 @@ const removeEmptyStrings = (obj) => {
        [strSubject,...rest] = [...strSlice];
        subject = rest.join(' ');
         [strEmpty,...scheRest] = [...kqFromDB];  
-    const filterSubjectNotEmpty = scheRest.map(item =>{
-         const newItem = removeEmptyStrings(item);
-            return newItem
-      })
-      filterSubjectNotEmpty.forEach((el) =>{
+    // const filterSubjectNotEmpty = scheRest.map(item =>{
+    //      const newItem = removeEmptyStrings(item);
+    //         return newItem
+    //   })
+    scheRest.forEach((el) =>{
        
        Object.keys(el).forEach((prop,index) => {
          const isCan = canSplit(el[prop],'-')
@@ -38,7 +38,7 @@ const removeEmptyStrings = (obj) => {
                if(el[prop].split('-')[1].toLowerCase().search(subject) !==-1){
                 result.push(el)
                }else{
-                delete el[prop]
+                el[prop] =""
                }
           }
         } );

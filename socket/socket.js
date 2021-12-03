@@ -60,13 +60,13 @@ const getScheduleByCalendar =async (schedule,mssv)=>{
 
   }
  
-//  setTimeout(async () => {
-//   const schedulesSubjectCurrent = await scheduleController.getScheduleSpecifyByCalendar("1812866",undefined,undefined,undefined);
-//   console.log(schedulesSubjectCurrent)
-//   const kqSubject =  ScheduleBySubject.getSubject("thời khóa biểu tuần này môn thiết kế mẫu",schedulesSubjectCurrent);
-//   console.log(kqSubject)
+ setTimeout(async () => {
+  const schedulesSubjectCurrent = await scheduleController.getScheduleSpecifyByCalendar("1812866",undefined,undefined,undefined);
+  console.log(schedulesSubjectCurrent)
+  const kqSubject =  ScheduleBySubject.getSubject("thời khóa biểu tuần này môn thiết kế mẫu",schedulesSubjectCurrent);
+  console.log(kqSubject)
 
-// },2000);
+},2000);
 
 
 
