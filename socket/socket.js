@@ -59,16 +59,16 @@ const getScheduleByCalendar =async (schedule,mssv)=>{
 
   }
  
-//  setTimeout(async () => {
-//   // const year = new Date().getFullYear();
-//   // const month = new Date().getMonth();
-//   // console.log(month)
-//   const kqs = ScheduleFromMonth.getNumberMonth("thời khóa biểu tháng 12");
-//   const result = await ScheduleFromMonth.getScheduleByMonth("1812866",kqs.month-1,kqs.year);
-//             result.forEach((item)=>{
-//            console.log(item);
-//           })
-//   },2000);
+ setTimeout(async () => {
+  const year = new Date().getFullYear();
+  const month = new Date().getMonth();
+  console.log(month)
+  // const kqs = ScheduleFromMonth.getNumberMonth("thời khóa biểu tháng 12");
+  const result = await ScheduleFromMonth.getScheduleByMonth("1812866",month,year);
+            result.forEach((item)=>{
+           console.log(item);
+          })
+  },2000);
 
 io.on("connection", socket => {
     // either with send()
@@ -422,7 +422,7 @@ io.on("connection", socket => {
                       sendWaiter();
                       const year = new Date().getFullYear();
                       const month = new Date().getMonth();
-                      const resultCurrent = await ScheduleFromMonth.getScheduleByMonth(data.mssv.toString(),month+1,year);
+                      const resultCurrent = await ScheduleFromMonth.getScheduleByMonth(data.mssv.toString(),month,year);
                         resultCurrent.forEach((item)=>{
                         socket.emit("send-schedule",item);
                               })
@@ -432,7 +432,7 @@ io.on("connection", socket => {
                           sendWaiter();
                           const yearCurrent = new Date().getFullYear();
                           const nextMonth = new Date().getMonth();
-                          const resultYesMonth = await ScheduleFromMonth.getScheduleByMonth(data.mssv.toString(),nextMonth+2,yearCurrent);
+                          const resultYesMonth = await ScheduleFromMonth.getScheduleByMonth(data.mssv.toString(),nextMonth+1,yearCurrent);
                           resultYesMonth.forEach((item)=>{
                             socket.emit("send-schedule",item);
                                   })
