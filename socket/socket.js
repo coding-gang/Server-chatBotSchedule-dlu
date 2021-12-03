@@ -59,16 +59,16 @@ const getScheduleByCalendar =async (schedule,mssv)=>{
 
   }
  
-//  setTimeout(async () => {
-//   const year = new Date().getFullYear();
-//   const month = new Date().getMonth();
-//   console.log(month)
-//   // const kqs = ScheduleFromMonth.getNumberMonth("thời khóa biểu tháng 12");
-//   const result = await ScheduleFromMonth.getScheduleByMonth("1812866",month,year);
+ setTimeout(async () => {
+  const year = new Date().getFullYear();
+  const month = new Date().getMonth();
+  console.log(month)
+  // const kqs = ScheduleFromMonth.getNumberMonth("thời khóa biểu tháng 12");
+  const result = await ScheduleFromMonth.getScheduleByMonth("1812866",month-2,year);
  
-//            console.log(result);
+           console.log(result);
 
-//   },2000);
+  },2000);
 
 io.on("connection", socket => {
     // either with send()

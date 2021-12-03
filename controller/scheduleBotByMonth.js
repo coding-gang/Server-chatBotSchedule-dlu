@@ -7,14 +7,16 @@ exports.getScheduleByMonth = async (mssv,month,year) =>{
     const week =  getWeek(dt);
     const arrayWeek = []
     const numberWeekOfMonth = weekCount(year,month);
+    console.log(numberWeekOfMonth)
    for(let i  =1 ; i< numberWeekOfMonth ; i++){
                const weekOfYear = week + i;
                 arrayWeek.push(weekOfYear);
    }
   getYearAndTermStudy(month,year);
+    
     const scheduleList = await Promise.all(arrayWeek.map(async (item)=>{
     const schedule =  await scheduleController.getScheduleSpecifyByCalendar(mssv,yearStudy,termID,item);
-      return schedule;
+    return schedule;
     }))
     return scheduleList;
 }
@@ -23,8 +25,9 @@ function weekCount(year, month_number) {
         // month_number is in the range 1..12
         var firstOfMonth = new Date(year, month_number-1, 1);
         var lastOfMonth = new Date(year, month_number, 0);
-    
-        var used = firstOfMonth.getDay() + lastOfMonth.getDate();
+      console.log(firstOfMonth)
+      console.log(lastOfMonth)
+        var used = firstOfMonth.getDay() + 6+ lastOfMonth.getDate();
     
         return Math.ceil( used / 7);
     }
