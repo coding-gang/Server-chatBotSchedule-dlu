@@ -34,8 +34,6 @@ exports.trainBot = async () => {
     nlp.addDocument('en', 'onweek', 'greetings.khoabieuTrongTuan');
   // Thang
     nlp.addDocument('vi', 'Thời khóa biểu tháng', 'greetings.khoabieuthang');
-
-
     nlp.addDocument('vi', 'Thời khóa biểu trong tháng này', 'greetings.khoabieuthangNay');
     nlp.addDocument('vi', 'Thời khóa biểu trong tháng này', 'greetings.khoabieuthangNay');
     nlp.addDocument('vi', 'Thời khóa biểu tháng này', 'greetings.khoabieuthangNay');
@@ -50,6 +48,18 @@ exports.trainBot = async () => {
     nlp.addDocument('vi', 'Thời khóa biểu tháng vừa rồi', 'greetings.khoabieuthangVuaRoi');
     nlp.addDocument('vi', 'Thời khóa biểu tháng vừa qua', 'greetings.khoabieuthangVuaRoi');
     nlp.addDocument('vi', 'Thời khóa biểu tháng trước', 'greetings.khoabieuthangVuaRoi');
+
+     // subject 
+     // thời khóa biểu tuần sau môn thiết kế mẫu
+
+  nlp.addDocument('vi', 'Thời khóa biểu tuần sau môn', 'greetings.thoikhoabieuTuanSaumon');
+
+  nlp.addDocument('vi', 'Thời khóa biểu tuần trước môn', 'greetings.thoikhoabieuTuanTruocmon');
+
+  nlp.addDocument('vi', 'Thời khóa biểu tuần này môn', 'greetings.thoikhoabieuTuanNaymon');
+
+
+
 
     nlp.addDocument('en', 'today', 'greetings.khoaBieuHomNay');
     nlp.addDocument('en', 'today schedule', 'greetings.khoaBieuHomNay');
@@ -95,8 +105,8 @@ exports.trainBot = async () => {
     nlp.addDocument('en', 'hello bot!', 'greetings.xinchao');
     nlp.addDocument('en', 'hello chatbot', 'greetings.xinchao');
     nlp.addDocument('en', 'hello chatbot!', 'greetings.xinchao');
-  
-  
+
+
     nlp.addDocument('vi', 'ngày mai có môn gì', 'greetings.khoaBieuNgayMai');
     nlp.addDocument('vi', 'ngay mai học môn gì', 'greetings.khoaBieuNgayMai');
     nlp.addDocument('vi', 'ngày mai', 'greetings.khoaBieuNgayMai');
@@ -302,6 +312,12 @@ exports.trainBot = async () => {
     nlp.addAnswer('vi', 'greetings.khoabieuthangToi', 'thời khóa biểu tháng tới');
     nlp.addAnswer('vi', 'greetings.khoabieuthangVuaRoi', 'thời khóa biểu tháng trước');
     
+    nlp.addAnswer('vi', 'greetings.thoikhoabieuTuanSaumon', 'thời khóa biểu tuần sau môn');
+    nlp.addAnswer('vi', 'greetings.thoikhoabieuTuanTruocmon', 'thời khóa biểu tuần trước môn');
+    nlp.addAnswer('vi', 'greetings.thoikhoabieuTuanNaymon', 'thời khóa biểu tuần này môn');
+    
+
+
     nlp.addAnswer('vi', 'greetings.MaSoSinhVien', 'MSSV');
     nlp.addAnswer('vi', 'greetings.hoTro', 'hỗ trợ');
 

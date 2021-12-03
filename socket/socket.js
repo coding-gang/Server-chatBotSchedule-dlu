@@ -6,6 +6,7 @@ let nlp;
 const scheduleController = require('../controller/scheduleController');
 const ScheduleGetDB = require("../controller/scheduleFromDBController");
 const ScheduleFromMonth = require('../controller/scheduleBotByMonth');
+const getSubject = require('../controller/ScheduleBotBySubject');
 const ERRORMESSAGE ="Xin lỗi bạn, có vấn đề về kết nối bạn hãy thử lại sau";
 (async () => { nlp = await bot.trainBot()})();
 
@@ -71,6 +72,12 @@ const getScheduleByCalendar =async (schedule,mssv)=>{
 //       }
 //   },2000);
 
+
+setTimeout(async() => {
+ await getSubject("Thời khóa biểu tuần sau của môn thiết kế mẫu");
+}, 2000);
+
+
 io.on("connection", socket => {
     // either with send()
     console.log(`connect success ${socket.id}`);
@@ -111,7 +118,6 @@ io.on("connection", socket => {
                  }
                  await getWeekSchedule(data.mssv.toString(),undefined,undefined,undefined);
                  break;
-
                 case "tuần tới":
                   sendWaiter();
                  const nextWeek = getWeek(new Date()) +1;
@@ -452,6 +458,19 @@ io.on("connection", socket => {
                       socket.emit("send-schedule",result);
                      }
                       break;
+                   case "thời khóa biểu tuần này môn":
+                    sendWaiter();
+                    const schedulesSubjectCurrent = await scheduleController.getScheduleSpecifyByCalendar(data.mssv.toString(),undefined,undefined,undefined);
+                    if(schedulesSubjectCurrent === null){
+                     const kqFromDBSubCurrent = await ScheduleGetDB.getSchedule(data.mssv.toString(),undefined,undefined,undefined);
+                     const kqSubjectDB = getSubject(kq.utterance,kqFromDBSubCurrent);
+                     socket.emit("send-schedule",kqSubjectDB);    
+                    }else{
+                      const kqSubject = getSubject(kq.utterance,schedulesSubjectCurrent);
+                     socket.emit("send-schedule",kqSubject);   
+                    }
+                    await getWeekSchedule(data.mssv.toString(),undefined,undefined,undefined);
+                      break;    
                   case "MSSV":
                     socket.emit("send-schedule",`Mã số sinh viên của bạn là:${data.mssv}`);
                      break;

@@ -79,6 +79,30 @@ const getYearAndTermStudy = () => {
   }
 };
 
+function repalceTitle(tab){
+      
+  let newKeyMappings = {
+    thu:  '0',
+    sang: 'Sáng',
+    chieu:'Chiều',
+    toi:  'Tối'
+  };
+
+    let mapped = Object.keys(tab).map(oldKey=> {
+      let newKey = newKeyMappings[oldKey];
+      let result ={};
+      result[newKey]=tab[oldKey];
+      return result;
+    });
+    let result = mapped.reduce((result, item)=> {
+      let key = Object.keys(item)[0];
+      result[key] = item[key];
+      return result;
+    }, {});
+
+    return result;
+}
+
 const getScheduleFromDB = async(studentId,weekCurrent)=>{
   const result = await Schedule.find({studentId: studentId, week:weekCurrent});
   const arrNewValue =[{ '0': '', 'Sáng': 'Sáng', 'Chiều': 'Chiều', 'Tối': 'Tối' }];
