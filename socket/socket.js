@@ -466,7 +466,7 @@ io.on("connection", socket => {
                      const kqSubjectDB = await ScheduleBySubject.getSubject(kq.utterance,kqFromDBSubCurrent);
                      socket.emit("send-schedule",kqSubjectDB);    
                     }else{
-                      const kqSubject = await ScheduleBySubject.getSubject(kq.utterance,kqFromDBSubCurrent);
+                      const kqSubject = await ScheduleBySubject.getSubject(kq.utterance,schedulesSubjectCurrent);
                      socket.emit("send-schedule",kqSubject);   
                     }
                     await getWeekSchedule(data.mssv.toString(),undefined,undefined,undefined);
