@@ -418,9 +418,10 @@ io.on("connection", socket => {
                    } 
                      break;   
                   case "thời khóa biểu tháng":
-                    const kq = ScheduleFromMonth.getNumberMonth(kq.utterance);
-                    console.log(kq)
-                     const result = await ScheduleFromMonth.getScheduleByMonth("1812866",kq.month,kq.year);
+                   //  sendWaiter();
+                   socket.emit("send-schedule","oktesst");
+                     const kq = ScheduleFromMonth.getNumberMonth(kq.utterance);
+                     const result = await ScheduleFromMonth.getScheduleByMonth(data.mssv.toString(),kq.month,kq.year);
                         result.forEach((item)=>{
                          socket.emit("send-schedule",item);
                         })

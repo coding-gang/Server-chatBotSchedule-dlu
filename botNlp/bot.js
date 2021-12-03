@@ -33,7 +33,7 @@ exports.trainBot = async () => {
     nlp.addDocument('en', 'ontheweek', 'greetings.khoabieuTrongTuan');
     nlp.addDocument('en', 'onweek', 'greetings.khoabieuTrongTuan');
  
-    nlp.addDocument('en', 'Thời khóa biểu tháng', 'greetings.khoabieuthang');
+    nlp.addDocument('vi', 'Thời khóa biểu tháng', 'greetings.khoabieuthang');
 
     nlp.addDocument('en', 'today', 'greetings.khoaBieuHomNay');
     nlp.addDocument('en', 'today schedule', 'greetings.khoaBieuHomNay');
