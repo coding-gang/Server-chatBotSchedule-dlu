@@ -34,12 +34,17 @@ exports.trainBot = async () => {
     nlp.addDocument('en', 'onweek', 'greetings.khoabieuTrongTuan');
   // Thang
     nlp.addDocument('vi', 'Thời khóa biểu tháng', 'greetings.khoabieuthang');
+
+
+    nlp.addDocument('vi', 'Thời khóa biểu trong tháng này', 'greetings.khoabieuthangNay');
+    nlp.addDocument('vi', 'Thời khóa biểu trong tháng này', 'greetings.khoabieuthangNay');
     nlp.addDocument('vi', 'Thời khóa biểu tháng này', 'greetings.khoabieuthangNay');
     nlp.addDocument('vi', 'Thời khóa biểu tháng hiện tại', 'greetings.khoabieuthangNay');
 
+    nlp.addDocument('vi', 'Thời khóa biểu tháng trong tới', 'greetings.khoabieuthangToi');
     nlp.addDocument('vi', 'Thời khóa biểu tháng tới', 'greetings.khoabieuthangToi');
+    nlp.addDocument('vi', 'Thời khóa biểu tháng trong sau', 'greetings.khoabieuthangToi');
     nlp.addDocument('vi', 'Thời khóa biểu tháng sau', 'greetings.khoabieuthangToi');
-    nlp.addDocument('vi', 'Thời khóa biểu tháng này', 'greetings.khoabieuthangToi');
     nlp.addDocument('vi', 'Thời khóa biểu tháng tiếp theo', 'greetings.khoabieuthangToi');
 
     nlp.addDocument('vi', 'Thời khóa biểu tháng vừa rồi', 'greetings.khoabieuthangVuaRoi');
