@@ -298,9 +298,9 @@ exports.trainBot = async () => {
     nlp.addAnswer('vi', 'greetings.khoabieuThuTuanTruoc', 'thứ tuần trước');
 
     nlp.addAnswer('vi', 'greetings.khoabieuthang', 'thời khóa biểu tháng');
-    nlp.addAnswer('vi', ' greetings.khoabieuthangNay', 'thời khóa biểu tháng này');
-    nlp.addAnswer('vi', ' greetings.khoabieuthangToi', 'thời khóa biểu tháng tới');
-    nlp.addAnswer('vi', ' greetings.khoabieuthangVuaRoi', 'thời khóa biểu tháng trước');
+    nlp.addAnswer('vi', 'greetings.khoabieuthangNay', 'thời khóa biểu tháng này');
+    nlp.addAnswer('vi', 'greetings.khoabieuthangToi', 'thời khóa biểu tháng tới');
+    nlp.addAnswer('vi', 'greetings.khoabieuthangVuaRoi', 'thời khóa biểu tháng trước');
     
     nlp.addAnswer('vi', 'greetings.MaSoSinhVien', 'MSSV');
     nlp.addAnswer('vi', 'greetings.hoTro', 'hỗ trợ');
