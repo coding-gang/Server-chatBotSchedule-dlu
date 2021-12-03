@@ -32,8 +32,19 @@ exports.trainBot = async () => {
     nlp.addDocument('en', 'onthisweek', 'greetings.khoabieuTrongTuan');
     nlp.addDocument('en', 'ontheweek', 'greetings.khoabieuTrongTuan');
     nlp.addDocument('en', 'onweek', 'greetings.khoabieuTrongTuan');
- 
+  // Thang
     nlp.addDocument('vi', 'Thời khóa biểu tháng', 'greetings.khoabieuthang');
+    nlp.addDocument('vi', 'Thời khóa biểu tháng này', 'greetings.khoabieuthangNay');
+    nlp.addDocument('vi', 'Thời khóa biểu tháng hiện tại', 'greetings.khoabieuthangNay');
+
+    nlp.addDocument('vi', 'Thời khóa biểu tháng tới', 'greetings.khoabieuthangToi');
+    nlp.addDocument('vi', 'Thời khóa biểu tháng sau', 'greetings.khoabieuthangToi');
+    nlp.addDocument('vi', 'Thời khóa biểu tháng này', 'greetings.khoabieuthangToi');
+    nlp.addDocument('vi', 'Thời khóa biểu tháng tiếp theo', 'greetings.khoabieuthangToi');
+
+    nlp.addDocument('vi', 'Thời khóa biểu tháng vừa rồi', 'greetings.khoabieuthangVuaRoi');
+    nlp.addDocument('vi', 'Thời khóa biểu tháng vừa qua', 'greetings.khoabieuthangVuaRoi');
+    nlp.addDocument('vi', 'Thời khóa biểu tháng trước', 'greetings.khoabieuthangVuaRoi');
 
     nlp.addDocument('en', 'today', 'greetings.khoaBieuHomNay');
     nlp.addDocument('en', 'today schedule', 'greetings.khoaBieuHomNay');
@@ -280,10 +291,16 @@ exports.trainBot = async () => {
     nlp.addAnswer('vi', 'greetings.khoabieuThuTrongTuan', 'thứ trong tuần'); 
     nlp.addAnswer('vi', 'greetings.khoabieuThuTuanSau', 'thứ tuần sau');
     nlp.addAnswer('vi', 'greetings.khoabieuThuTuanTruoc', 'thứ tuần trước');
+
     nlp.addAnswer('vi', 'greetings.khoabieuthang', 'thời khóa biểu tháng');
+    nlp.addAnswer('vi', ' greetings.khoabieuthangNay', 'thời khóa biểu tháng này');
+    nlp.addAnswer('vi', ' greetings.khoabieuthangToi', 'thời khóa biểu tháng tới');
+    nlp.addAnswer('vi', ' greetings.khoabieuthangVuaRoi', 'thời khóa biểu tháng trước');
     
     nlp.addAnswer('vi', 'greetings.MaSoSinhVien', 'MSSV');
     nlp.addAnswer('vi', 'greetings.hoTro', 'hỗ trợ');
+
+
 
     await nlp.train();
     return nlp;

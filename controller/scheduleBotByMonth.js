@@ -1,8 +1,9 @@
 const scheduleController = require('./scheduleController');
 
 let yearStudy;
+let termID;
 exports.getScheduleByMonth = async (mssv,month,year) =>{
-    const dt = new Date(Date.UTC(year, month-1)); // get number month
+    const dt = new Date(Date.UTC(year, month)); // get number month
     const week =  getWeek(dt);
     const arrayWeek = []
     const numberWeekOfMonth = weekCount(year,month);
@@ -10,14 +11,12 @@ exports.getScheduleByMonth = async (mssv,month,year) =>{
                const weekOfYear = week + i;
                 arrayWeek.push(weekOfYear);
    }
-    const term =  getYearAndTermStudy(month-1,year);
+  getYearAndTermStudy(month,year);
     const scheduleList = await Promise.all(arrayWeek.map(async (item)=>{
-    const schedule =  await scheduleController.getScheduleSpecifyByCalendar(mssv,yearStudy,term,item);
+    const schedule =  await scheduleController.getScheduleSpecifyByCalendar(mssv,yearStudy,termID,item);
       return schedule;
     }))
     return scheduleList;
-
-
 }
 
 function weekCount(year, month_number) {
@@ -119,3 +118,4 @@ const getWeek = d => {
         year:year
     }
   }
+ 

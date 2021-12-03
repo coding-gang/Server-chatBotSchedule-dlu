@@ -60,16 +60,15 @@ const getScheduleByCalendar =async (schedule,mssv)=>{
   }
  
 //  setTimeout(async () => {
-//  const kq = ScheduleFromMonth.getNumberMonth("Thời khóa biểu tháng 11 năm 2021");
-//  console.log(kq)
-//   const result = await ScheduleFromMonth.getScheduleByMonth("1812866",kq.month,kq.year);
-//   result.forEach((item)=>{
-//     console.log(item);
-// //    socket.emit("send-schedule",item);
-//   })
-//  }, 2000);
-
-
+//   // const year = new Date().getFullYear();
+//   // const month = new Date().getMonth();
+//   // console.log(month)
+//   const kqs = ScheduleFromMonth.getNumberMonth("thời khóa biểu tháng 12");
+//   const result = await ScheduleFromMonth.getScheduleByMonth("1812866",kqs.month-1,kqs.year);
+//             result.forEach((item)=>{
+//            console.log(item);
+//           })
+//   },2000);
 
 io.on("connection", socket => {
     // either with send()
@@ -419,13 +418,42 @@ io.on("connection", socket => {
                      break;   
                   case "thời khóa biểu tháng":
                     sendWaiter();
-                    socket.emit("send-schedule","tesst");
                      const kqs = ScheduleFromMonth.getNumberMonth(kq.utterance);
-                     const result = await ScheduleFromMonth.getScheduleByMonth(data.mssv.toString(),kqs.month,kqs.year);
+                     const result = await ScheduleFromMonth.getScheduleByMonth(data.mssv.toString(),kqs.month-1,kqs.year);
                         result.forEach((item)=>{
                          socket.emit("send-schedule",item);
                         })
                         break;
+                    case "thời khóa biểu tháng này":
+                      sendWaiter();
+                      const year = new Date().getFullYear();
+                      const month = new Date().getMonth();
+                      const resultCurrent = await ScheduleFromMonth.getScheduleByMonth(data.mssv.toString(),month+1,year);
+                        resultCurrent.forEach((item)=>{
+                        socket.emit("send-schedule",item);
+                              })
+                        break;
+                        
+                    case "thời khóa biểu tháng tới":
+                          sendWaiter();
+                          const yearCurrent = new Date().getFullYear();
+                          const nextMonth = new Date().getMonth();
+                          const resultYesMonth = await ScheduleFromMonth.getScheduleByMonth(data.mssv.toString(),nextMonth+2,yearCurrent);
+                          resultYesMonth.forEach((item)=>{
+                            socket.emit("send-schedule",item);
+                                  })
+                            break;   
+                            
+                    case "thời khóa biểu tháng trước":
+                          sendWaiter();
+                          const yearCurrentYes = new Date().getFullYear();
+                          const yesMonth = new Date().getMonth();
+                          const resultNextMonth = await ScheduleFromMonth.getScheduleByMonth(data.mssv.toString(),yesMonth-1,yearCurrentYes);
+                          resultNextMonth.forEach((item)=>{
+                            socket.emit("send-schedule",item);
+                                      })
+                              break;          
+
                   case "MSSV":
                     socket.emit("send-schedule",`Mã số sinh viên của bạn là:${data.mssv}`);
                      break;
