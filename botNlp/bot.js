@@ -33,7 +33,7 @@ exports.trainBot = async () => {
     nlp.addDocument('en', 'ontheweek', 'greetings.khoabieuTrongTuan');
     nlp.addDocument('en', 'onweek', 'greetings.khoabieuTrongTuan');
  
-  
+    nlp.addDocument('en', 'Thời khóa biểu tháng', 'greetings.khoabieuthang');
 
     nlp.addDocument('en', 'today', 'greetings.khoaBieuHomNay');
     nlp.addDocument('en', 'today schedule', 'greetings.khoaBieuHomNay');
@@ -280,6 +280,8 @@ exports.trainBot = async () => {
     nlp.addAnswer('vi', 'greetings.khoabieuThuTrongTuan', 'thứ trong tuần'); 
     nlp.addAnswer('vi', 'greetings.khoabieuThuTuanSau', 'thứ tuần sau');
     nlp.addAnswer('vi', 'greetings.khoabieuThuTuanTruoc', 'thứ tuần trước');
+    nlp.addAnswer('vi', 'greetings.khoabieuthang', 'thời khóa biểu tháng');
+    
     nlp.addAnswer('vi', 'greetings.MaSoSinhVien', 'MSSV');
     nlp.addAnswer('vi', 'greetings.hoTro', 'hỗ trợ');
 

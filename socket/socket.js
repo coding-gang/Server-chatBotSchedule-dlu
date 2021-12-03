@@ -4,8 +4,8 @@ const io = require('socket.io')(server);
 const bot = require('../botNlp/bot');
 let nlp;
 const scheduleController = require('../controller/scheduleController');
-const ScheduleFromDB = require("../controller/scheduleFromDBController");
-
+const ScheduleGetDB = require("../controller/scheduleFromDBController");
+const ScheduleFromMonth = require('../controller/scheduleBotByMonth');
 const ERRORMESSAGE ="Xin lỗi bạn, có vấn đề về kết nối bạn hãy thử lại sau";
 (async () => { nlp = await bot.trainBot()})();
 
@@ -59,40 +59,17 @@ const getScheduleByCalendar =async (schedule,mssv)=>{
 
   }
  
-  const data = {
-    "dataCalendar":[
-      {"data":{"dayName":"Thứ 4","month":12,"week":50,"year":"2021-2022"},
-       "text":"T.12 8, 2021"
-      },
-      {"data":{"dayName":"Thứ 5","month":12,"week":50,"year":"2021-2022"},
-       "text":"T.13 8, 2021"
-      }
-     ],
-     "mssv":"1812866"
-  }
+//  setTimeout(async () => {
+//  const kq = ScheduleFromMonth.getNumberMonth("Thời khóa biểu tháng 11 năm 2021");
+//  console.log(kq)
+//   const result = await ScheduleFromMonth.getScheduleByMonth("1812866",kq.month,kq.year);
+//   result.forEach((item)=>{
+//     console.log(item);
+// //    socket.emit("send-schedule",item);
+//   })
+//  }, 2000);
 
-const testFunc =async(data)=>{
-    let firstItem ={};
-  if(data.hasOwnProperty("dataCalendar")){
-   // sendWaiter();
-    const scheduleCalendars = data.dataCalendar;
-    const mssv = data.mssv.toString();
-   const resultToBot =  await Promise.all(scheduleCalendars.map( async (item)=>{
-      const schedule = await getScheduleByCalendar(item,mssv);
-     firstItem =  schedule.splice(0,1)[0];
-     schedule[0].Sáng  !=='' ? schedule[0].Sáng  = schedule[0].Sáng.concat(' (',item.text,')') :'' ;
-     schedule[0].Chiều !=='' ? schedule[0].Chiều = schedule[0].Chiều.concat(' (',item.text,')'):'';
-     schedule[0].Tối   !=='' ? schedule[0].Tối =  schedule[0].Tối.concat(' (',item.text,')')   :'';
-      return schedule[0]
-    }))
-    resultToBot.unshift(firstItem)
-   console.log( resultToBot);
-}
-}
 
- setTimeout(async() => {
-  await testFunc(data);
- }, 2000);
 
 io.on("connection", socket => {
     // either with send()
@@ -440,6 +417,14 @@ io.on("connection", socket => {
                     await getWeekSchedule(data.mssv.toString(),undefined,undefined,previousWeekByDate.toString());
                    } 
                      break;   
+                  case "thời khóa biểu tháng":
+                    const kq = ScheduleFromMonth.getNumberMonth(kq.utterance);
+                    console.log(kq)
+                     const result = await ScheduleFromMonth.getScheduleByMonth("1812866",kq.month,kq.year);
+                        result.forEach((item)=>{
+                         socket.emit("send-schedule",item);
+                        })
+                        break;
                   case "MSSV":
                     socket.emit("send-schedule",`Mã số sinh viên của bạn là:${data.mssv}`);
                      break;
