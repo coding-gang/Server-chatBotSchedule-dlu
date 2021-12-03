@@ -423,9 +423,6 @@ io.on("connection", socket => {
                       const year = new Date().getFullYear();
                       const month = new Date().getMonth();
                       const resultCurrent = await ScheduleFromMonth.getScheduleByMonth(data.mssv.toString(),month,year);
-                        // resultCurrent.forEach((item)=>{
-                        // socket.emit("send-schedule",item);
-                        //       })
                           socket.emit("send-schedule",resultCurrent);
                     break;
                         
@@ -434,9 +431,7 @@ io.on("connection", socket => {
                           const yearCurrent = new Date().getFullYear();
                           const nextMonth = new Date().getMonth();
                           const resultYesMonth = await ScheduleFromMonth.getScheduleByMonth(data.mssv.toString(),nextMonth+1,yearCurrent);
-                          resultYesMonth.forEach((item)=>{
-                            socket.emit("send-schedule",item);
-                                  })
+                          socket.emit("send-schedule",resultYesMonth);
                     break;   
                             
                     case "thời khóa biểu tháng trước":
@@ -444,18 +439,14 @@ io.on("connection", socket => {
                           const yearCurrentYes = new Date().getFullYear();
                           const yesMonth = new Date().getMonth();
                           const resultNextMonth = await ScheduleFromMonth.getScheduleByMonth(data.mssv.toString(),yesMonth-1,yearCurrentYes);
-                          resultNextMonth.forEach((item)=>{
-                            socket.emit("send-schedule",item);
-                                      })
+                          socket.emit("send-schedule",resultNextMonth);
                     break;          
 
                   case "thời khóa biểu tháng":
                     sendWaiter();
                      const kqs = ScheduleFromMonth.getNumberMonth(kq.utterance);
                      const result = await ScheduleFromMonth.getScheduleByMonth(data.mssv.toString(),kqs.month-1,kqs.year);
-                        result.forEach((item)=>{
-                         socket.emit("send-schedule",item);
-                        })
+                     socket.emit("send-schedule",result);
                       break;
 
 
