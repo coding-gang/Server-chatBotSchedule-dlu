@@ -78,6 +78,7 @@ const getWeek = d => {
   exports.getNumberMonth = (inputText)=>{
       let month;
       let year;
+      let check =false;
     if(inputText.toLowerCase().includes("tháng")){
         const output = inputText.replace(/\'/g, '').split(/(\d+)/).filter(Boolean); 
         output.forEach(e =>{
@@ -87,13 +88,24 @@ const getWeek = d => {
                    if(kq.toString().length <3 ){
                       const thang = parseInt(kq);
                       month =thang;
-                      console.log(month);
+                      check =true;
                     }
                    else{ 
                       return "Không tìm thấy lịch bạn yêu cầu!"
                    }
             }
           })
+          if(!check){
+            const textDate = output[0].toLowerCase().trim();
+            const strSplit =  textDate.split(' ');
+            const indexSearch = strSplit.indexOf('tháng');
+            if(indexSearch !== -1){
+            let strDate = strSplit[indexSearch+1].toString().toLowerCase();
+            if(strDate === 'mười') strDate += " " +strSplit[indexSearch+2].toString().toLowerCase();
+             let numberMonth = transNumberMonth(strDate);
+             month = numberMonth
+            }     
+          }  
     }
     if(inputText.toLowerCase().includes("năm")){
         const output = inputText.replace(/\'/g, '').split(/(\d+)/).filter(Boolean); 
@@ -122,3 +134,50 @@ const getWeek = d => {
     }
   }
  
+  const transNumberMonth = (textMonth) =>{
+    const text = textMonth.toLowerCase();
+    let numberOfDay;
+ 
+    switch(text){
+      case "một":
+        numberOfDay = 1;
+            break;
+      case "hai": 
+      numberOfDay = 2;    
+          break;
+      case "ba":
+        numberOfDay = 3;  
+          break;
+      case "tư":
+        numberOfDay = 4;    
+          break;
+      case "năm":
+        numberOfDay = 5;    
+          break;
+      case "sáu":
+        numberOfDay = 6;  
+          break;
+      case "bảy":
+        numberOfDay = 7;  
+          break; 
+      case "tám":
+        numberOfDay = 8;
+          break;  
+      case "chín":
+        numberOfDay = 9;   
+          break;
+      case "mười":
+        numberOfDay = 10;   
+          break;  
+      case "mười một":
+        numberOfDay = 11;   
+          break;
+      case "mười hai":
+        numberOfDay = 12;   
+          break;     
+      default:
+        numberOfDay =13;    
+          break; 
+  }
+  return numberOfDay;
+  }

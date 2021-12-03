@@ -59,16 +59,17 @@ const getScheduleByCalendar =async (schedule,mssv)=>{
 
   }
  
- setTimeout(async () => {
-  const year = new Date().getFullYear();
-  const month = new Date().getMonth();
-  console.log(month)
-  // const kqs = ScheduleFromMonth.getNumberMonth("thời khóa biểu tháng 12");
-  const result = await ScheduleFromMonth.getScheduleByMonth("1812866",month-2,year);
- 
-           console.log(result);
-
-  },2000);
+//  setTimeout(async () => {
+//   const year = new Date().getFullYear();
+//   const month = new Date().getMonth();
+//   console.log(month)
+//    const kqs = ScheduleFromMonth.getNumberMonth("thời khóa biểu tháng mười ba");
+//       if(kqs.month === 13) console.log(kqs.month)
+//       else{
+//         const result = await ScheduleFromMonth.getScheduleByMonth("1812866",kqs.month-1,kqs.year);
+//         console.log(result);
+//       }
+//   },2000);
 
 io.on("connection", socket => {
     // either with send()
@@ -445,11 +446,12 @@ io.on("connection", socket => {
                   case "thời khóa biểu tháng":
                     sendWaiter();
                      const kqs = ScheduleFromMonth.getNumberMonth(kq.utterance);
-                     const result = await ScheduleFromMonth.getScheduleByMonth(data.mssv.toString(),kqs.month-1,kqs.year);
-                     socket.emit("send-schedule",result);
+                     if(kqs.month === 13) socket.emit("send-schedule","Không có thời khóa biểu học!");
+                     else{
+                      const result = await ScheduleFromMonth.getScheduleByMonth(data.mssv.toString(),kqs.month-1,kqs.year);
+                      socket.emit("send-schedule",result);
+                     }
                       break;
-
-
                   case "MSSV":
                     socket.emit("send-schedule",`Mã số sinh viên của bạn là:${data.mssv}`);
                      break;
@@ -468,7 +470,6 @@ io.on("connection", socket => {
               default:
                 socket.emit("send-schedule","Xin lỗi, tôi không hiểu ý bạn!");
                 break;
-  
          }
        }
      
