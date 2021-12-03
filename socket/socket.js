@@ -59,16 +59,16 @@ const getScheduleByCalendar =async (schedule,mssv)=>{
 
   }
  
- setTimeout(async () => {
-  const year = new Date().getFullYear();
-  const month = new Date().getMonth();
-  console.log(month)
-  // const kqs = ScheduleFromMonth.getNumberMonth("thời khóa biểu tháng 12");
-  const result = await ScheduleFromMonth.getScheduleByMonth("1812866",month,year);
-            result.forEach((item)=>{
-           console.log(item);
-          })
-  },2000);
+//  setTimeout(async () => {
+//   const year = new Date().getFullYear();
+//   const month = new Date().getMonth();
+//   console.log(month)
+//   // const kqs = ScheduleFromMonth.getNumberMonth("thời khóa biểu tháng 12");
+//   const result = await ScheduleFromMonth.getScheduleByMonth("1812866",month,year);
+ 
+//            console.log(result);
+
+//   },2000);
 
 io.on("connection", socket => {
     // either with send()
@@ -423,9 +423,10 @@ io.on("connection", socket => {
                       const year = new Date().getFullYear();
                       const month = new Date().getMonth();
                       const resultCurrent = await ScheduleFromMonth.getScheduleByMonth(data.mssv.toString(),month,year);
-                        resultCurrent.forEach((item)=>{
-                        socket.emit("send-schedule",item);
-                              })
+                        // resultCurrent.forEach((item)=>{
+                        // socket.emit("send-schedule",item);
+                        //       })
+                          socket.emit("send-schedule",resultCurrent);
                     break;
                         
                     case "thời khóa biểu tháng tới":
