@@ -50,5 +50,11 @@ const removeEmptyStrings = (obj) => {
  
   }
 
+  exports.getSubjectByMonth =(text,schedules)=>{
+  const result =  schedules.map((item)=>{
+          return  this.getSubject(text,item);
+    })
+      return result      
+  }
 
 

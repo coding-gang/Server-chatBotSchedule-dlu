@@ -24,6 +24,7 @@ exports.trainBot = async () => {
 
   // Thang
     nlp.addDocument('vi', 'Thời khóa biểu tháng', 'greetings.khoabieuthang');
+
     nlp.addDocument('vi', 'Thời khóa biểu trong tháng này', 'greetings.khoabieuthangNay');
     nlp.addDocument('vi', 'Thời khóa biểu trong tháng này', 'greetings.khoabieuthangNay');
     nlp.addDocument('vi', 'Thời khóa biểu tháng này', 'greetings.khoabieuthangNay');
@@ -49,7 +50,12 @@ exports.trainBot = async () => {
     nlp.addDocument('vi', 'Thời khóa biểu tuần này môn', 'greetings.thoikhoabieuTuanNaymon');
     nlp.addDocument('vi', 'tkb tuần này môn', 'greetings.thoikhoabieuTuanNaymon');
 
-
+     // subject 
+     // thời khóa biểu tháng  môn thiết kế mẫu
+    nlp.addDocument('vi', 'Thời khóa biểu trong tháng này môn', 'greetings.khoabieuthangNayMon');
+    nlp.addDocument('vi', 'tkb trong tháng này môn', 'greetings.khoabieuthangNayMon');
+    nlp.addDocument('vi', 'Thời khóa biểu tháng này môn', 'greetings.khoabieuthangNayMon');
+    nlp.addDocument('vi', 'tkb tháng này môn', 'greetings.khoabieuthangNayMon');
 
 
     nlp.addDocument('vi', 'hôm nay học môn gì', 'greetings.khoaBieuHomNay');
@@ -269,6 +275,8 @@ exports.trainBot = async () => {
     nlp.addAnswer('vi', 'greetings.thoikhoabieuTuanSaumon', 'thời khóa biểu tuần sau môn');
     nlp.addAnswer('vi', 'greetings.thoikhoabieuTuanTruocmon', 'thời khóa biểu tuần trước môn');
     nlp.addAnswer('vi', 'greetings.thoikhoabieuTuanNaymon', 'thời khóa biểu tuần này môn');
+    
+    nlp.addAnswer('vi', 'greetings.khoabieuthangNayMon', 'thời khóa biểu tháng này môn');
     
 
 
