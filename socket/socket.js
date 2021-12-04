@@ -7,6 +7,7 @@ const scheduleController = require('../controller/scheduleController');
 const ScheduleGetDB = require("../controller/scheduleFromDBController");
 const ScheduleFromMonth = require('../controller/scheduleBotByMonth');
 const ScheduleBySubject = require('../controller/ScheduleBotBySubject');
+const ScheduleByTeach = require('../controller/scheduleBotByTeach');
 const ERRORMESSAGE ="Xin lỗi bạn, có vấn đề về kết nối bạn hãy thử lại sau";
 (async () => { nlp = await bot.trainBot()})();
 
@@ -63,10 +64,11 @@ const getScheduleByCalendar =async (schedule,mssv)=>{
   // setTimeout(async()=>{
   //   const yearSubject = new Date().getFullYear();
   //   const monthSubject = new Date().getMonth();
-  //   const resultCurrentSubject = await ScheduleFromMonth.getScheduleByMonth("1812866",monthSubject,yearSubject);
-  //   const rsMonthSubject = ScheduleBySubject.getSubjectByMonth("thời khóa biểu tháng này môn thiết kế mẫu",resultCurrentSubject)
+  //   const schedules = await scheduleController.getScheduleSpecifyByCalendar("1812866",undefined,undefined,undefined);
+  //   console.log(schedules);
+  //   const rsMonthSubject = ScheduleByTeach.getTeach("thời khóa biểu tuần này của giáo viên Hiệp",schedules)
   //   console.log(rsMonthSubject)
-  // },5000)
+  // },4000)
 
 io.on("connection", socket => {
     // either with send()
@@ -528,6 +530,171 @@ io.on("connection", socket => {
                       }
                       await getWeekSchedule(data.mssv.toString(),undefined,undefined,nextWeekSubject);
                        break;
+
+                     case "thời khóa biểu giáo viên tuần này":
+                      sendWaiter();           
+                      const schedulesTeach = await scheduleController.getScheduleSpecifyByCalendar(data.mssv.toString(),undefined,undefined,undefined);
+                      if(schedulesTeach === null){
+                       const kqFromDB = await ScheduleGetDB.getSchedule(data.mssv.toString(),undefined,undefined,undefined);
+                       const rsWeekTeach = ScheduleByTeach.getTeach(kq.utterance,kqFromDB)
+                       socket.emit("send-schedule",rsWeekTeach);    
+                      }else{
+                        const rsScheduleTeach = ScheduleByTeach.getTeach(kq.utterance,schedulesTeach)
+                        socket.emit("send-schedule",rsScheduleTeach);   
+                      }
+                      await getWeekSchedule(data.mssv.toString(),undefined,undefined,undefined);
+                        break;
+                     
+                    case "thời khóa biểu giáo viên tuần sau":
+                      sendWaiter();
+                      const nextWeekTeach = getWeek(new Date()) +1;
+                     const schedulesNextWeekTeach = await scheduleController.getScheduleSpecifyByCalendar(data.mssv.toString(),undefined,undefined,nextWeekTeach);
+                      if(schedulesNextWeekTeach === null){
+                       const kqFromDB = await ScheduleGetDB.getSchedule(data.mssv.toString(),undefined,undefined,nextWeek);
+                       const rsScheduleTeach = ScheduleByTeach.getTeach(kq.utterance,kqFromDB)
+                       socket.emit("send-schedule",rsScheduleTeach);    
+                      }else{
+                        const rsScheduleTeach = ScheduleByTeach.getTeach(kq.utterance,schedulesNextWeekTeach)
+                       socket.emit("send-schedule",rsScheduleTeach); 
+                      }
+                      await getWeekSchedule(data.mssv.toString(),undefined,undefined,nextWeekTeach);
+                       break;
+                   
+                    case "thời khóa biểu giáo viên tuần trước":
+                      sendWaiter();
+                      const previousWeekTeach =  getWeek(new Date()) - 1;
+                      const schedulesPreviousWeekTeach = await scheduleController.getScheduleSpecifyByCalendar(data.mssv.toString(),undefined,undefined,previousWeekTeach);
+                     if(schedulesPreviousWeekTeach === null){
+                      const kqFromDB = await ScheduleGetDB.getSchedule(data.mssv.toString(),undefined,undefined,previousWeekTeach);
+                      const rsScheduleTeach = ScheduleByTeach.getTeach(kq.utterance,kqFromDB)
+                      socket.emit("send-schedule",rsScheduleTeach);    
+                     }else{
+                      const rsScheduleTeach = ScheduleByTeach.getTeach(kq.utterance,schedulesPreviousWeekTeach)
+                      socket.emit("send-schedule",rsScheduleTeach); 
+                     }
+                     await getWeekSchedule(data.mssv.toString(),undefined,undefined,previousWeekTeach);
+                       break;  
+                  case "thời khóa biểu giáo viên ngày mai":
+                    sendWaiter();
+                    if(scheduleController.hasTomorrowIsNextWeek()){
+                      getWeek(new Date());        
+                   const nextWeek =  getWeek(new Date()) +1;
+                   const scheduleNextWeek = await scheduleController.getScheduleSpecifyByCalendar(data.mssv.toString(),undefined,undefined,nextWeek.toString());
+                   if(scheduleNextWeek === null){
+                    const kqFromDB = await ScheduleGetDB.getSchedule(data.mssv.toString(),undefined,undefined,nextWeek.toString());
+                    if(Array.isArray(kqFromDB)){
+                      const result =  scheduleController.getNextDaySchedule(kqFromDB,"Thứ 2");
+                      const rsScheduleTeach = ScheduleByTeach.getTeach(kq.utterance,result)
+                      socket.emit("send-schedule",rsScheduleTeach);
+                    }else{
+                      socket.emit("send-schedule",ERRORMESSAGE);
+                    }  
+                  }else{
+                    if(Array.isArray(scheduleNextWeek)){
+                      const result =  scheduleController.getNextDaySchedule(scheduleNextWeek,"Thứ 2");
+                      const rsScheduleTeach = ScheduleByTeach.getTeach(kq.utterance,result)
+                      socket.emit("send-schedule",rsScheduleTeach);
+                    }else{
+                      socket.emit("send-schedule",ERRORMESSAGE);
+                    }   
+                  }    
+                  await getWeekSchedule(data.mssv.toString(),undefined,undefined,nextWeek.toString());
+                    }else{
+                      const scheduleNextWeek = await scheduleController.getScheduleSpecifyByCalendar(data.mssv.toString(),undefined,undefined,undefined);
+                      if(scheduleNextWeek === null){
+                       const kqFromDB = await ScheduleGetDB.getSchedule(data.mssv.toString(),undefined,undefined,undefined);
+                       if(Array.isArray(kqFromDB)){
+                         const result =  scheduleController.getNextDaySchedule(kqFromDB,"Thứ 2");
+                         const rsScheduleTeach = ScheduleByTeach.getTeach(kq.utterance,result)
+                         socket.emit("send-schedule",rsScheduleTeach);
+                       }else{
+                         socket.emit("send-schedule",ERRORMESSAGE);
+                       }  
+                     }else{
+                      if(Array.isArray(scheduleNextWeek)){
+                        const result =  scheduleController.getNextDaySchedule(scheduleNextWeek,null);
+                        const rsScheduleTeach = ScheduleByTeach.getTeach(kq.utterance,result)
+                        socket.emit("send-schedule",rsScheduleTeach);
+                      }else{
+                        socket.emit("send-schedule",ERRORMESSAGE);
+                      }
+                     }   
+                     await getWeekSchedule(data.mssv.toString(),undefined,undefined,undefined);                          
+                    }
+
+                    break;
+                    case "thời khóa biểu giáo viên hôm nay":
+                      sendWaiter();
+                      const scheduleCurrentTeach = await scheduleController.getScheduleSpecifyByCalendar(data.mssv.toString(),undefined,undefined,undefined);
+                      if(scheduleCurrentTeach === null){
+                        const kqFromDB = await ScheduleGetDB.getSchedule(data.mssv.toString(),undefined,undefined,undefined);
+                        if(Array.isArray(kqFromDB)){                        
+                          const result = getTodaySchedule(kqFromDB);  
+                          const rsScheduleTeach = ScheduleByTeach.getTeach(kq.utterance,result)
+                         socket.emit("send-schedule",rsScheduleTeach);
+                           }else{
+                             socket.emit("send-schedule",ERRORMESSAGE);
+                           }
+                       }else{
+                        if(Array.isArray(scheduleCurrentTeach)){
+                          const result = getTodaySchedule(scheduleCurrentTeach);        
+                          const rsScheduleTeach = ScheduleByTeach.getTeach(kq.utterance,result)  
+                          socket.emit("send-schedule",rsScheduleTeach);
+                        }else{
+                          socket.emit("send-schedule",ERRORMESSAGE);
+                        }   
+                       } 
+                       await getWeekSchedule(data.mssv.toString(),undefined,undefined,undefined);
+                     break; 
+                  case "thời khóa biểu giáo viên hôm qua":
+                    sendWaiter();
+                    if(scheduleController.hasYesterdayIsPreviousWeek()){
+                      const previousWeek =  getWeek(new Date()) - 1;
+                      const schedulePreviousWeek = await scheduleController.getScheduleSpecifyByCalendar(data.mssv.toString(),undefined,undefined,previousWeek.toString());            
+                       if(schedulePreviousWeek === null){
+                        const kqFromDB = await ScheduleGetDB.getSchedule(data.mssv.toString(),undefined,undefined,previousWeek.toString());
+                        if(Array.isArray(kqFromDB)){
+                          const result =  scheduleController.getYesterDaySchedule(kqFromDB,"Thứ 2");
+                          const rsScheduleTeach = ScheduleByTeach.getTeach(kq.utterance,result) 
+                        socket.emit("send-schedule",rsScheduleTeach);
+                        }else{
+                          socket.emit("send-schedule",ERRORMESSAGE);
+                        }
+                       }else{
+                        if(Array.isArray(schedulePreviousWeek)){
+                          const result =  scheduleController.getYesterDaySchedule(schedulePreviousWeek,"Thứ 2");
+                          const rsScheduleTeach = ScheduleByTeach.getTeach(kq.utterance,result) 
+                        socket.emit("send-schedule",rsScheduleTeach);
+                        }else{
+                          socket.emit("send-schedule",ERRORMESSAGE);
+                        }
+                       }
+                       await getWeekSchedule(data.mssv.toString(),undefined,undefined,previousWeek.toString()); 
+                    }   
+                    else{
+                      const schedule = await scheduleController.getScheduleSpecifyByCalendar(data.mssv.toString(),undefined,undefined,undefined);            
+                      if(schedule === null){
+                        const kqFromDB = await ScheduleGetDB.getSchedule(data.mssv.toString(),undefined,undefined,undefined);
+                        if(Array.isArray(kqFromDB)){
+                          const result =  scheduleController.getYesterDaySchedule(kqFromDB);
+                          const rsScheduleTeach = ScheduleByTeach.getTeach(kq.utterance,result) 
+                          socket.emit("send-schedule",rsScheduleTeach);
+                        }else{
+                          socket.emit("send-schedule",ERRORMESSAGE);
+                        }  
+                       }else{
+                        if(Array.isArray(schedule)){
+                          const result =  scheduleController.getYesterDaySchedule(schedule);
+                          const rsScheduleTeach = ScheduleByTeach.getTeach(kq.utterance,result) 
+                          socket.emit("send-schedule",rsScheduleTeach);
+                        }else{
+                          socket.emit("send-schedule",ERRORMESSAGE);
+                        }  
+                       }
+                       await getWeekSchedule(data.mssv.toString(),undefined,undefined,undefined); 
+                    }
+                    break;   
+
                   case "MSSV":
                     socket.emit("send-schedule",`Mã số sinh viên của bạn là:${data.mssv}`);
                      break;
