@@ -60,17 +60,13 @@ const getScheduleByCalendar =async (schedule,mssv)=>{
 
   }
  
-//  setTimeout(async () => {
-
-//   const year = new Date().getFullYear();
-//   const month = new Date().getMonth();
-//   const schedules = await scheduleController.getScheduleSpecifyByCalendar("1812866",undefined,undefined,undefined);
-//  // const rsMonthSubject = ScheduleBySubject.getSubjectByMonth("thời khóa biểu tháng này môn thiết kế mẫu",resultCurrentSubject)
-//   console.log(schedules)
-// },2000);
-
-
-
+  // setTimeout(async()=>{
+  //   const yearSubject = new Date().getFullYear();
+  //   const monthSubject = new Date().getMonth();
+  //   const resultCurrentSubject = await ScheduleFromMonth.getScheduleByMonth("1812866",monthSubject,yearSubject);
+  //   const rsMonthSubject = ScheduleBySubject.getSubjectByMonth("thời khóa biểu tháng này môn thiết kế mẫu",resultCurrentSubject)
+  //   console.log(rsMonthSubject)
+  // },5000)
 
 io.on("connection", socket => {
     // either with send()
@@ -443,14 +439,32 @@ io.on("connection", socket => {
                           const resultYesMonth = await ScheduleFromMonth.getScheduleByMonth(data.mssv.toString(),nextMonth+1,yearCurrent);
                           socket.emit("send-schedule",resultYesMonth);
                     break;   
-                            
+                
+                    case "thời khóa biểu tháng sau môn":
+                      sendWaiter();
+                      const yearSubjectNext = new Date().getFullYear();
+                      const monthSubjectNext = new Date().getMonth();
+                      const resultYesMonthSubject = await ScheduleFromMonth.getScheduleByMonth(data.mssv.toString(),monthSubjectNext+1,yearSubjectNext);
+                      const rsMonthNextSubject = ScheduleBySubject.getSubjectByMonth(kq.utterance,resultYesMonthSubject)
+                      socket.emit("send-schedule",rsMonthNextSubject);
+                    break;  
+                       
                     case "thời khóa biểu tháng trước":
                           sendWaiter();
                           const yearCurrentYes = new Date().getFullYear();
                           const yesMonth = new Date().getMonth();
                           const resultNextMonth = await ScheduleFromMonth.getScheduleByMonth(data.mssv.toString(),yesMonth-1,yearCurrentYes);
                           socket.emit("send-schedule",resultNextMonth);
-                    break;          
+                    break;         
+
+                    case "thời khóa biểu tháng trước môn":
+                          sendWaiter();
+                          const yearCurrentYesSubject = new Date().getFullYear();
+                          const yesMonthSubject = new Date().getMonth();
+                          const resultPreviousMonthSubject = await ScheduleFromMonth.getScheduleByMonth(data.mssv.toString(),yesMonthSubject-1,yearCurrentYesSubject);
+                          const rsMonthPreviousSubject = ScheduleBySubject.getSubjectByMonth(kq.utterance,resultPreviousMonthSubject)
+                          socket.emit("send-schedule",rsMonthPreviousSubject);
+                      break; 
 
                   case "thời khóa biểu tháng":
                     sendWaiter();
@@ -461,6 +475,17 @@ io.on("connection", socket => {
                       socket.emit("send-schedule",result);
                      }
                       break;
+                  case "thời khóa biểu tháng môn":
+                    sendWaiter();
+                    const kqsByMonth = ScheduleFromMonth.getNumberMonth(kq.utterance);
+                    if(kqsByMonth.month === 13) socket.emit("send-schedule","Không có thời khóa biểu học!");
+                    else{
+                     const resultSubjectByMonth = await ScheduleFromMonth.getScheduleByMonth(data.mssv.toString(),kqsByMonth.month-1,kqsByMonth.year);
+                     const rsSubjectByMonth = ScheduleBySubject.getSubjectByMonth(kq.utterance,resultSubjectByMonth)
+                     socket.emit("send-schedule",rsSubjectByMonth);
+                    }
+                      break;                    
+
                    case "thời khóa biểu tuần này môn":
                     sendWaiter();
                     const schedulesSubjectCurrent = await scheduleController.getScheduleSpecifyByCalendar(data.mssv.toString(),undefined,undefined,undefined);

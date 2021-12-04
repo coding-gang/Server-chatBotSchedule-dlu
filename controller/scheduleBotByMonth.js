@@ -7,7 +7,6 @@ exports.getScheduleByMonth = async (mssv,month,year) =>{
     const week =  getWeek(dt);
     const arrayWeek = []
     const numberWeekOfMonth = weekCount(year,month);
-    console.log(numberWeekOfMonth)
    for(let i  =1 ; i< numberWeekOfMonth ; i++){
                const weekOfYear = week + i;
                 arrayWeek.push(weekOfYear);

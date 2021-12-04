@@ -25,11 +25,13 @@ const removeEmptyStrings = (obj) => {
     const strSlice = strSplit.slice(indexSearch);
        [strSubject,...rest] = [...strSlice];
        subject = rest.join(' ');
-        [strEmpty,...scheRest] = [...kqFromDB];  
+       [strEmpty,...scheRest] = [...kqFromDB];  
+
     // const filterSubjectNotEmpty = scheRest.map(item =>{
     //      const newItem = removeEmptyStrings(item);
     //         return newItem
     //   })
+
     scheRest.forEach((el) =>{
        
        Object.keys(el).forEach((prop,index) => {

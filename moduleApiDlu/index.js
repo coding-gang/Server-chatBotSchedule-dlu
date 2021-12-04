@@ -21,7 +21,7 @@ const termImportRegex = new RegExp(
     "^(HK0[1-3])|(hk0[1-3])|(hK0[1-3])|(Hk0[1-3])$"
 );
 
-const sessionId = "0u4nhabk0pxplvl1sxtvbt5z";
+const sessionId = "2f2zu3wgj4ngib3vtza0nbar";
 
 const data = qs.stringify({
     txtTaiKhoan: process.env.STUDENT_ID,
