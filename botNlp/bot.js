@@ -4,7 +4,6 @@ exports.trainBot = async () => {
     const dock = await dockStart({ use: ['Basic']});
    const nlp = dock.get('nlp');
    nlp.addLanguage('vi');
-   nlp.addLanguage('en');
     //Adds the utterances and intents for the NLP
     nlp.addDocument('vi', 'tuần này', 'greetings.khoabieuTrongTuan');
     nlp.addDocument('vi', 'tuan nay', 'greetings.khoabieuTrongTuan');
@@ -22,16 +21,7 @@ exports.trainBot = async () => {
     nlp.addDocument('vi', 'thoi khoa bieu trong tuan la gi', 'greetings.khoabieuTrongTuan');
     nlp.addDocument('vi', 'tuần này học môn gì', 'greetings.khoabieuTrongTuan');
     nlp.addDocument('vi', 'trong tuần này có môn gì', 'greetings.khoabieuTrongTuan');
-    nlp.addDocument('en', 'on this week', 'greetings.khoabieuTrongTuan');
-    nlp.addDocument('en', 'schedule on this week', 'greetings.khoabieuTrongTuan');
-    nlp.addDocument('en', 'on the week', 'greetings.khoabieuTrongTuan');
-    nlp.addDocument('en', 'schedule on the week', 'greetings.khoabieuTrongTuan');
-    nlp.addDocument('en', 'on week', 'greetings.khoabieuTrongTuan');
-    nlp.addDocument('en', 'schedule on week', 'greetings.khoabieuTrongTuan');
-    nlp.addDocument('en', 'week schedule', 'greetings.khoabieuTrongTuan');
-    nlp.addDocument('en', 'onthisweek', 'greetings.khoabieuTrongTuan');
-    nlp.addDocument('en', 'ontheweek', 'greetings.khoabieuTrongTuan');
-    nlp.addDocument('en', 'onweek', 'greetings.khoabieuTrongTuan');
+
   // Thang
     nlp.addDocument('vi', 'Thời khóa biểu tháng', 'greetings.khoabieuthang');
     nlp.addDocument('vi', 'Thời khóa biểu trong tháng này', 'greetings.khoabieuthangNay');
@@ -52,18 +42,16 @@ exports.trainBot = async () => {
      // subject 
      // thời khóa biểu tuần sau môn thiết kế mẫu
 
-  nlp.addDocument('vi', 'Thời khóa biểu tuần sau môn', 'greetings.thoikhoabieuTuanSaumon');
+    nlp.addDocument('vi', 'Thời khóa biểu tuần sau môn', 'greetings.thoikhoabieuTuanSaumon');
+    nlp.addDocument('vi', 'tkb tuần sau môn', 'greetings.thoikhoabieuTuanSaumon');
+    nlp.addDocument('vi', 'Thời khóa biểu tuần trước môn', 'greetings.thoikhoabieuTuanTruocmon');
+    nlp.addDocument('vi', 'tkb tuần trước môn', 'greetings.thoikhoabieuTuanTruocmon');
+    nlp.addDocument('vi', 'Thời khóa biểu tuần này môn', 'greetings.thoikhoabieuTuanNaymon');
+    nlp.addDocument('vi', 'tkb tuần này môn', 'greetings.thoikhoabieuTuanNaymon');
 
-  nlp.addDocument('vi', 'Thời khóa biểu tuần trước môn', 'greetings.thoikhoabieuTuanTruocmon');
-
-  nlp.addDocument('vi', 'Thời khóa biểu tuần này môn', 'greetings.thoikhoabieuTuanNaymon');
 
 
 
-
-    nlp.addDocument('en', 'today', 'greetings.khoaBieuHomNay');
-    nlp.addDocument('en', 'today schedule', 'greetings.khoaBieuHomNay');
-    nlp.addDocument('en', 'schedule today', 'greetings.khoaBieuHomNay');
     nlp.addDocument('vi', 'hôm nay học môn gì', 'greetings.khoaBieuHomNay');
     nlp.addDocument('vi', 'hôm nay có môn gì', 'greetings.khoaBieuHomNay');
     nlp.addDocument('vi', 'hôm nay', 'greetings.khoaBieuHomNay');
@@ -93,18 +81,6 @@ exports.trainBot = async () => {
     nlp.addDocument('vi', 'chao', 'greetings.xinchao');
     nlp.addDocument('vi', 'chào!', 'greetings.xinchao');
     nlp.addDocument('vi', 'chao!', 'greetings.xinchao');
-    nlp.addDocument('en', 'hi', 'greetings.xinchao');
-    nlp.addDocument('en', 'hi!', 'greetings.xinchao');
-    nlp.addDocument('en', 'hi chatbot', 'greetings.xinchao');
-    nlp.addDocument('en', 'hi chatbot!', 'greetings.xinchao');
-    nlp.addDocument('en', 'hi bot', 'greetings.xinchao');
-    nlp.addDocument('en', 'hi bot!', 'greetings.xinchao');
-    nlp.addDocument('en', 'hello', 'greetings.xinchao');
-    nlp.addDocument('en', 'hello!', 'greetings.xinchao');
-    nlp.addDocument('en', 'hello bot', 'greetings.xinchao');
-    nlp.addDocument('en', 'hello bot!', 'greetings.xinchao');
-    nlp.addDocument('en', 'hello chatbot', 'greetings.xinchao');
-    nlp.addDocument('en', 'hello chatbot!', 'greetings.xinchao');
 
 
     nlp.addDocument('vi', 'ngày mai có môn gì', 'greetings.khoaBieuNgayMai');
@@ -129,15 +105,7 @@ exports.trainBot = async () => {
     nlp.addDocument('vi', 'mon gi vao ngay mai', 'greetings.khoaBieuNgayMai');
     nlp.addDocument('vi', 'học môn gì vào ngày mai', 'greetings.khoaBieuNgayMai');
     nlp.addDocument('vi', 'hoc mon gi vao ngay mai', 'greetings.khoaBieuNgayMai');
-    nlp.addDocument('en', 'tomorrow', 'greetings.khoaBieuNgayMai');
-    nlp.addDocument('en', 'tomorrow schedule', 'greetings.khoaBieuNgayMai');
-    nlp.addDocument('en', 'schedule tomorrow', 'greetings.khoaBieuNgayMai');
-   
-    nlp.addDocument('en', 'schedule next week', 'greetings.khoaBieuTuanSau');
-    nlp.addDocument('en', 'next week', 'greetings.khoaBieuTuanSau');
-    nlp.addDocument('en', 'next week schedule', 'greetings.khoaBieuTuanSau');
-    nlp.addDocument('en', 'the next week', 'greetings.khoaBieuTuanSau');
-    nlp.addDocument('en', 'the next week schedule', 'greetings.khoaBieuTuanSau');
+
     nlp.addDocument('vi', 'tuần sau', 'greetings.khoaBieuTuanSau');
     nlp.addDocument('vi', 'tuan sau', 'greetings.khoaBieuTuanSau');
     nlp.addDocument('vi', 'tuần tới', 'greetings.khoaBieuTuanSau');
@@ -150,11 +118,6 @@ exports.trainBot = async () => {
     nlp.addDocument('vi', 'tuần tới học môn gì', 'greetings.khoaBieuTuanSau');
     nlp.addDocument('vi', 'tuần tới có môn gì', 'greetings.khoaBieuTuanSau');
 
-    nlp.addDocument('en', 'schedule last week', 'greetings.khoaBieuTuanTruoc');
-    nlp.addDocument('en', 'last week', 'greetings.khoaBieuTuanTruoc');
-    nlp.addDocument('en', 'last week schedule', 'greetings.khoaBieuTuanTruoc');
-    nlp.addDocument('en', 'the last week', 'greetings.khoaBieuTuanTruoc');
-    nlp.addDocument('en', 'the last week schedule', 'greetings.khoaBieuTuanTruoc');
     nlp.addDocument('vi', 'tuần vừa rồi', 'greetings.khoaBieuTuanTruoc');
     nlp.addDocument('vi', 'tuan vua roi', 'greetings.khoaBieuTuanTruoc');
     nlp.addDocument('vi', 'tuần trước', 'greetings.khoaBieuTuanTruoc');
@@ -167,9 +130,6 @@ exports.trainBot = async () => {
     nlp.addDocument('vi', 'tuần trước học môn gì', 'greetings.khoaBieuTuanTruoc');
     nlp.addDocument('vi', 'tuần trước có môn gì', 'greetings.khoaBieuTuanTruoc');
 
-    nlp.addDocument('en', 'yesterday', 'greetings.khoaBieuHomQua');
-    nlp.addDocument('en', 'yesterday schedule', 'greetings.khoaBieuHomQua');
-    nlp.addDocument('en', 'schedule yesterday', 'greetings.khoaBieuHomQua');
     nlp.addDocument('vi', 'hôm qua', 'greetings.khoaBieuHomQua');
     nlp.addDocument('vi', 'hom qua', 'greetings.khoaBieuHomQua');
     nlp.addDocument('vi', 'thời khóa biểu hôm qua', 'greetings.khoaBieuHomQua');
@@ -177,9 +137,6 @@ exports.trainBot = async () => {
     nlp.addDocument('vi', 'hôm qua có môn gì', 'greetings.khoaBieuHomQua');
     nlp.addDocument('vi', 'hôm qua học môn gì', 'greetings.khoaBieuHomQua');
 
-    nlp.addDocument('en', 'the next day', 'greetings.khoaBieuNgayMot');
-    nlp.addDocument('en', 'the next day schedule', 'greetings.khoaBieuNgayMot');
-    nlp.addDocument('en', 'schedule the next day', 'greetings.khoaBieuNgayMot');
     nlp.addDocument('vi', 'mốt', 'greetings.khoaBieuNgayMot');
     nlp.addDocument('vi', 'mot', 'greetings.khoaBieuNgayMot');
     nlp.addDocument('vi', 'ngày mốt', 'greetings.khoaBieuNgayMot');
@@ -205,9 +162,6 @@ exports.trainBot = async () => {
     nlp.addDocument('vi', 'thời khóa biểu ngày tới', 'greetings.khoaBieuNgayMot');
     nlp.addDocument('vi', 'thoi khoa bieu ngay toi', 'greetings.khoaBieuNgayMot');
   
-    nlp.addDocument('en', 'schedule the last yesterday', 'greetings.khoaBieuNgayHomKia');
-    nlp.addDocument('en', 'the last yesterday', 'greetings.khoaBieuNgayHomKia');
-    nlp.addDocument('en', 'the last yesterday schedule', 'greetings.khoaBieuNgayHomKia');
     nlp.addDocument('vi', 'hôm kia', 'greetings.khoaBieuNgayHomKia');
     nlp.addDocument('vi', 'hom kia', 'greetings.khoaBieuNgayHomKia');
     nlp.addDocument('vi', 'thời khóa biểu ngày hôm kia', 'greetings.khoaBieuNgayHomKia');

@@ -60,13 +60,13 @@ const getScheduleByCalendar =async (schedule,mssv)=>{
 
   }
  
- setTimeout(async () => {
-  const schedulesSubjectCurrent = await scheduleController.getScheduleSpecifyByCalendar("1812866",undefined,undefined,undefined);
-  console.log(schedulesSubjectCurrent)
-  const kqSubject =  ScheduleBySubject.getSubject("thời khóa biểu tuần này môn thiết kế mẫu",schedulesSubjectCurrent);
-  console.log(kqSubject)
+//  setTimeout(async () => {
+//   const schedulesSubjectCurrent = await scheduleController.getScheduleSpecifyByCalendar("1812866",undefined,undefined,undefined);
+//   console.log(schedulesSubjectCurrent)
+//   const kqSubject =  ScheduleBySubject.getSubject("thời khóa biểu tuần này môn thiết kế mẫu",schedulesSubjectCurrent);
+//   console.log(kqSubject)
 
-},2000);
+// },2000);
 
 
 
@@ -464,6 +464,35 @@ io.on("connection", socket => {
                     }
                     await getWeekSchedule(data.mssv.toString(),undefined,undefined,undefined);
                       break;    
+                      
+                    case "thời khóa biểu tuần trước môn":
+                        sendWaiter();
+                        const previousWeekSubject =  getWeek(new Date()) - 1;
+                        const schedulesPreviousWeekSubject = await scheduleController.getScheduleSpecifyByCalendar(data.mssv.toString(),undefined,undefined,previousWeekSubject);
+                       if(schedulesPreviousWeekSubject === null){
+                        const kqFromDB = await ScheduleGetDB.getSchedule(data.mssv.toString(),undefined,undefined,previousWeekSubject);
+                        const kqSubjectDB =  ScheduleBySubject.getSubject(kq.utterance,kqFromDB);
+                        socket.emit("send-schedule",kqSubjectDB);    
+                       }else{
+                        const kqSubjectDB =  ScheduleBySubject.getSubject(kq.utterance,schedulesPreviousWeekSubject);
+                        socket.emit("send-schedule",kqSubjectDB); 
+                       }
+                       await getWeekSchedule(data.mssv.toString(),undefined,undefined,previousWeekSubject);
+                          break; 
+                     case "thời khóa biểu tuần sau môn":
+                      sendWaiter();
+                      const nextWeekSubject = getWeek(new Date()) +1;
+                     const schedulesNextWeekSubject= await scheduleController.getScheduleSpecifyByCalendar(data.mssv.toString(),undefined,undefined,nextWeekSubject);
+                      if(schedulesNextWeekSubject === null){
+                       const kqFromDB = await ScheduleGetDB.getSchedule(data.mssv.toString(),undefined,undefined,nextWeekSubject);
+                       const kqSubjectDB =  ScheduleBySubject.getSubject(kq.utterance,kqFromDB);
+                       socket.emit("send-schedule",kqSubjectDB);    
+                      }else{
+                        const kqSubjectDB =  ScheduleBySubject.getSubject(kq.utterance,schedulesNextWeekSubject);
+                       socket.emit("send-schedule",kqSubjectDB); 
+                      }
+                      await getWeekSchedule(data.mssv.toString(),undefined,undefined,nextWeekSubject);
+                       break;
                   case "MSSV":
                     socket.emit("send-schedule",`Mã số sinh viên của bạn là:${data.mssv}`);
                      break;
